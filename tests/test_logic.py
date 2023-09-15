@@ -1,10 +1,9 @@
 import unittest
-from logic import AND, OR, NOT, IMPLIES, IFF, Variable
-from proof_rules import *
+from context import AND, OR, NOT, IMPLIES, IFF, Variable
+from context import CommutativityAND, CommutativityOR, CommutativityIFF, DoubleNegation, ExcludedMiddle, Contradiction, DeMorganAND, DeMorganOR, ImplicationElimination, DistributivityAND, DistributivityOR, Idempotence
 
 
 class LogicRulesTests(unittest.TestCase):
-
     def setUp(self):
         self.P = Variable("P")
         self.Q = Variable("Q")
