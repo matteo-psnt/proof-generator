@@ -1,6 +1,26 @@
 import unittest
 from context import AND, OR, NOT, IMPLIES, IFF, Variable
-from context import CommutativityAND, CommutativityOR, CommutativityIFF, DoubleNegation, ExcludedMiddle, Contradiction, DeMorganAND, DeMorganOR, ImplicationElimination, DistributivityAND, DistributivityOR, Idempotence
+from context import (
+    CommutativityAND,
+    CommutativityOR,
+    CommutativityIFF,
+    DoubleNegation,
+    ExcludedMiddle,
+    Contradiction,
+    DeMorganAND,
+    DeMorganOR,
+    ImplicationElimination,
+    DistributivityAND,
+    DistributivityOR,
+    Idempotence,
+    Equivalence,
+    Simplification1Var,
+    Simplification1True,
+    Simplification1False,
+    Simplification2Or,
+    Simplification2And
+)
+
 
 
 class LogicRulesTests(unittest.TestCase):
