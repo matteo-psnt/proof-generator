@@ -93,6 +93,26 @@ class DeMorganOR(Rule):
     def apply(self, expr):
         return AND(NOT(expr.expression.left), NOT(expr.expression.right))
 
+class DeMorganANDReverse(Rule):
+    '''De Morgans's Laws for AND: (¬P)v(¬Q)⟺¬(P∧Q)'''
+    rule_name = "dm"
+    
+    def can_apply(self, expr):
+        return isinstance(expr, OR) and isinstance(expr.left, NOT) and isinstance(expr.right, NOT)
+
+    def apply(self, expr):
+        return NOT(AND(expr.left.expression, expr.right.expression))
+
+class DeMorganORReverse(Rule):
+    '''De Morgans's Laws for OR: (¬P)∧(¬Q)⟺¬(PvQ)'''
+    rule_name = "dm"
+    
+    def can_apply(self, expr):
+        return isinstance(expr, AND) and isinstance(expr.left, NOT) and isinstance(expr.right, NOT)
+
+    def apply(self, expr):
+        return NOT(OR(expr.left.expression, expr.right.expression))
+
 class ImplicationElimination(Rule):
     '''Implication Elimination: (P⇒Q)⟺(¬P)vQ'''
     rule_name = "imp_elim"
@@ -128,7 +148,7 @@ class Idempotence(Rule):
     rule_name = "idemp"
     
     def can_apply(self, expr):
-        return expr.left == expr.right and (isinstance(expr, AND) or isinstance(expr, OR))
+        return (isinstance(expr, AND) or isinstance(expr, OR)) and expr.left == expr.right
 
     def apply(self, expr):
         return expr.left
@@ -142,6 +162,16 @@ class Equivalence(Rule):
 
     def apply(self, expr):
         return AND(IMPLIES(expr.left, expr.right), IMPLIES(expr.right, expr.left))
+
+class EquivalenceReverse(Rule):
+    '''Equivalence: (P⇒Q)∧(Q⇒P)⟺P⟺Q'''
+    rule_name = "equiv"
+    
+    def can_apply(self, expr):
+        return isinstance(expr, AND) and isinstance(expr.left, IMPLIES) and isinstance(expr.right, IMPLIES) and expr.left.left == expr.right.right and expr.left.right == expr.right.left
+
+    def apply(self, expr):
+        return IFF(expr.left.left, expr.left.right)
 
 class Simplification1Var(Rule):
     '''Simplification1: P∧True ⟺ PvFalse ⟺ P'''
@@ -221,9 +251,36 @@ class Simplification2And(Rule):
                 return expr.left.right
     
 
-# To use
-expr = AND(Variable("P"), Variable("Q"))
-comm_rule = CommutativityAND()
-if comm_rule.can_apply(expr):
-    new_expr = comm_rule.apply(expr)
-    print(new_expr)
+
+
+rules_list = [
+    CommutativityAND(),
+    CommutativityOR(),
+    CommutativityIFF(),
+    DoubleNegation(),
+    ExcludedMiddle(),
+    Contradiction(),
+    DeMorganAND(),
+    DeMorganOR(),
+    DeMorganANDReverse(),
+    DeMorganORReverse(),
+    ImplicationElimination(),
+    DistributivityAND(),
+    DistributivityOR(),
+    Idempotence(),
+    Equivalence(),
+    EquivalenceReverse(),
+    Simplification1Var(),
+    Simplification1True(),
+    Simplification1False(),
+    Simplification2Or(),
+    Simplification2And()
+]
+
+
+if __name__ == "__main__":
+    expr = AND(Variable("P"), Variable("Q"))
+    comm_rule = CommutativityAND()
+    if comm_rule.can_apply(expr):
+        new_expr = comm_rule.apply(expr)
+        print(new_expr)
