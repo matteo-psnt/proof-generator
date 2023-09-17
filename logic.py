@@ -1,5 +1,4 @@
 
-
 class NOT:
     def __init__(self, expression):
         self.expression = expression
@@ -15,6 +14,15 @@ class NOT:
     
     def __eq__(self, other):
         return isinstance(other, NOT) and self.expression == other.expression
+    
+    def __hash__(self):
+        return hash(self.expression)
+    
+    def __len__(self):
+        if isinstance(self.expression, bool):
+            return 2
+        else:
+            return len(self.expression) + 1
 
 
 class AND:
@@ -33,6 +41,19 @@ class AND:
     
     def __eq__(self, other):
         return isinstance(other, AND) and self.left == other.left and self.right == other.right
+    
+    def __hash__(self):
+        return hash((self.left, self.right))
+    
+    def __len__(self):
+        if isinstance(self.left, bool) and isinstance(self.right, bool):
+            return 3
+        elif isinstance(self.left, bool):
+            return len(self.right) + 2
+        elif isinstance(self.right, bool):
+            return len(self.left) + 2
+        else:
+            return len(self.left) + len(self.right) + 1
         
 
 class OR:
@@ -52,6 +73,19 @@ class OR:
     def __eq__(self, other):
         return isinstance(other, OR) and self.left == other.left and self.right == other.right
     
+    def __hash__(self):
+        return hash((self.left, self.right))
+    
+    def __len__(self):
+        if isinstance(self.left, bool) and isinstance(self.right, bool):
+            return 3
+        elif isinstance(self.left, bool):
+            return len(self.right) + 2
+        elif isinstance(self.right, bool):
+            return len(self.left) + 2
+        else:
+            return len(self.left) + len(self.right) + 1
+    
 class IMPLIES:
     def __init__(self, left, right):
         self.left = left
@@ -68,6 +102,19 @@ class IMPLIES:
     
     def __eq__(self, other):
         return isinstance(other, IMPLIES) and self.left == other.left and self.right == other.right
+    
+    def __hash__(self):
+        return hash((self.left, self.right))
+    
+    def __len__(self):
+        if isinstance(self.left, bool) and isinstance(self.right, bool):
+            return 3
+        elif isinstance(self.left, bool):
+            return len(self.right) + 2
+        elif isinstance(self.right, bool):
+            return len(self.left) + 2
+        else:
+            return len(self.left) + len(self.right) + 1
 
 class IFF:
     def __init__(self, left, right):
@@ -85,6 +132,21 @@ class IFF:
     
     def __eq__(self, other):
         return isinstance(other, IFF) and self.left == other.left and self.right == other.right
+    
+    def __hash__(self):
+        return hash((self.left, self.right))
+    
+    def __len__(self):
+        if isinstance(self.left, bool) and isinstance(self.right, bool):
+            return 3
+        elif isinstance(self.left, bool):
+            return len(self.right) + 2
+        elif isinstance(self.right, bool):
+            return len(self.left) + 2
+        else:
+            return len(self.left) + len(self.right) + 1
+        
+
 
 class Variable:
     def __init__(self, name):
@@ -101,3 +163,9 @@ class Variable:
     
     def __eq__(self, other):
         return isinstance(other, Variable) and self.name == other.name
+    
+    def __hash__(self):
+        return hash(self.name)
+    
+    def __len__(self):
+        return 1
