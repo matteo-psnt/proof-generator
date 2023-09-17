@@ -1,5 +1,6 @@
 import re
 from itertools import product
+from typing import Any
 from logic import AND, OR, NOT, IMPLIES, IFF, Variable
 from expresion_constructor import construct_ast
 from expresion_parser import parse_bool_expression
@@ -15,10 +16,16 @@ class BooleanExpression:
     def __str__(self):
         return str(self.expression)
     
+    def __repr__(self):
+        return repr(self.expression)
+    
     def __eq__(self, object: object) -> bool:
         if not isinstance(object, BooleanExpression):
             return False
-        return self.generate_truth_table == object.generate_truth_table
+        return self.expression == object.expression
+
+    def __getattr__(self, name):
+        return getattr(self.expression, name)
 
     def _extract_variables(self, expr):
         """Recursively extract unique variables from the expression."""
@@ -29,6 +36,13 @@ class BooleanExpression:
         elif isinstance(expr, (AND, OR, IMPLIES, IFF)):
             return self._extract_variables(expr.left) | self._extract_variables(expr.right)
         return set()
+    
+    def logical_equivalence(self, other):
+        """Check if two BooleanExpressions are logically equivalent."""
+        if isinstance(other, BooleanExpression):
+            return self.generate_truth_table() == other.generate_truth_table()
+        else:
+            return False
 
     def generate_truth_table(self):
         """Generate a truth table for the BooleanExpression."""
