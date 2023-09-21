@@ -2,8 +2,8 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from logic import AND, OR, NOT, IMPLIES, IFF, Variable
-from proof_rules import (
+from logic import AND, OR, NOT, IMP, IFF, VAR
+from transformational_proof_rules import (
     CommutativityAND,
     CommutativityOR,
     CommutativityIFF,
