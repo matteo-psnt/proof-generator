@@ -1,5 +1,5 @@
 import unittest
-from context import AND, OR, NOT, IMPLIES, IFF, Variable
+from context import AND, OR, NOT, IMP, IFF, VAR
 from context import (
     CommutativityAND,
     CommutativityOR,
@@ -25,9 +25,9 @@ from context import (
 
 class LogicRulesTests(unittest.TestCase):
     def setUp(self):
-        self.P = Variable("P")
-        self.Q = Variable("Q")
-        self.R = Variable("R")
+        self.P = VAR("P")
+        self.Q = VAR("Q")
+        self.R = VAR("R")
     
     def test_AND_commutativity(self):
         rule = CommutativityAND()
@@ -80,7 +80,7 @@ class LogicRulesTests(unittest.TestCase):
 
     def test_implication_to_OR_conversion(self):
         rule = ImplicationElimination()
-        expr = IMPLIES(self.P, self.Q)
+        expr = IMP(self.P, self.Q)
         self.assertTrue(rule.can_apply(expr))
         self.assertEqual(rule.apply(expr), OR(NOT(self.P), self.Q))
 

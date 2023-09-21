@@ -1,5 +1,5 @@
 import unittest
-from context import AND, OR, NOT, IMPLIES, IFF, Variable
+from context import AND, OR, NOT, IMP, IFF, VAR
 
 class TestLogicOperations(unittest.TestCase):
     def setUp(self):
@@ -10,27 +10,27 @@ class TestLogicOperations(unittest.TestCase):
         }
 
     def test_not(self):
-        expr = NOT(Variable('A'))
+        expr = NOT(VAR('A'))
         self.assertEqual(expr.evaluate(self.assignment), False)
 
     def test_and(self):
-        expr = AND(Variable('A'), Variable('B'))
+        expr = AND(VAR('A'), VAR('B'))
         self.assertEqual(expr.evaluate(self.assignment), False)
 
     def test_or(self):
-        expr = OR(Variable('A'), Variable('C'))
+        expr = OR(VAR('A'), VAR('C'))
         self.assertEqual(expr.evaluate(self.assignment), True)
 
     def test_implies(self):
-        expr = IMPLIES(Variable('A'), Variable('B'))
+        expr = IMP(VAR('A'), VAR('B'))
         self.assertEqual(expr.evaluate(self.assignment), False)
 
     def test_iff(self):
-        expr = IFF(Variable('A'), Variable('C'))
+        expr = IFF(VAR('A'), VAR('C'))
         self.assertEqual(expr.evaluate(self.assignment), True)
 
     def test_variable(self):
-        var = Variable('B')
+        var = VAR('B')
         self.assertEqual(var.evaluate(self.assignment), False)
 
 
