@@ -1,70 +1,55 @@
 from boolean_expresion import BooleanExpression
-from logic import AND, OR, NOT, IMPLIES, IFF, Variable
-from proof_rules import rules_list
+from logic import AND, OR, NOT, IMP, IFF, VAR
+from transformational_proof_rules import rules_list
 
 
 # Takes in a boolean statment and then creates a list of all the possible forms of that statment
-def possible_forms(expr, max_depth=25, rules_list=rules_list, depth=0, forms=None) -> set:
-    if forms == None:
+def possible_forms(expr, max_depth=15, rules_list=rules_list, depth=0, forms=None) -> set:
+    if forms is None:
         forms = set()
 
-    if not isinstance(expr, bool) and len(expr) > 35:
+    # Ensure termination
+    if depth > max_depth or (hasattr(expr, '__len__') and len(expr) > 15):
         return forms
-    
-    if isinstance(expr, Variable):
-        return forms
-    
-    if depth > max_depth:
-        return forms
-    
-    forms_with_rule = set()
+
+    new_forms = set()
+
+    # Apply all rules from the rules list
     for rule in rules_list:
         if rule.can_apply(expr):
-            if rule.apply(expr) not in forms:
-                forms_with_rule.add(rule.apply(expr))
-    
-    psbl_forms = set()
-    for form in forms_with_rule:
-        if form not in forms:
-            psbl_forms.update(possible_forms(form, max_depth, rules_list, depth+1, forms))
-    
-    forms.update(psbl_forms)
-    forms.update(forms_with_rule)
-                
-    
-    new_forms = set()
-    more_forms = set()
-    
+            new_form = rule.apply(expr)
+            if new_form not in forms:
+                new_forms.add(new_form)
+                new_forms.update(possible_forms(new_form, max_depth, rules_list, depth + 1))
+
+    # Generate forms for the sub-expressions
     if isinstance(expr, NOT):
-        psbl_forms = possible_forms(expr.expression, max_depth, rules_list, depth+1)
-        new_forms = {NOT(exresion) for exresion in psbl_forms}
-    
-    elif isinstance(expr, (AND, OR, IMPLIES, IFF)):
-        top_type = type(expr)
-        psbl_forms_left = possible_forms(expr.left, max_depth, rules_list, depth+1)
-        psbl_forms_right = possible_forms(expr.right, max_depth, rules_list, depth+1)
-        
-        for left_form in psbl_forms_left:
-            for right_form in psbl_forms_right:
-                form = top_type(left_form, right_form)
-                new_forms.add(form)
-                    
-    for exresion in new_forms:
-        if exresion not in forms:
-            more_forms.update(possible_forms(expr, max_depth, rules_list, depth+1))
-    
-    forms.update(more_forms)
+        for form in possible_forms(expr.expression, max_depth, rules_list, depth + 1):
+            new_forms.add(NOT(form))
+
+    elif isinstance(expr, (AND, OR, IMP, IFF)):
+        left_exprs = possible_forms(expr.left, max_depth, rules_list, depth + 1)
+        right_exprs = possible_forms(expr.right, max_depth, rules_list, depth + 1)
+        left_exprs.add(expr.left)
+        right_exprs.add(expr.right)
+        for left in left_exprs:
+            for right in right_exprs:
+                new_forms.add(type(expr)(left, right))
+
     forms.update(new_forms)
-        
-                
+    # print(forms)
     return forms
 
 
+
 if __name__ == "__main__":
-    expr = BooleanExpression("!(a <=> b)").expression
+    expr = BooleanExpression("c | (a => (!c | (b => c)))").expression
+
+    
     print(expr)
     print(repr(expr))
-    forms = possible_forms(expr, max_depth=5)
+    forms = possible_forms(expr, max_depth=10)
+    print(len(forms))
     for form in forms:
         print(form)
 
