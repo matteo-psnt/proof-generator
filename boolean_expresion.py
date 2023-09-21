@@ -1,7 +1,7 @@
 import re
 from itertools import product
 from typing import Any
-from logic import AND, OR, NOT, IMPLIES, IFF, Variable
+from logic import AND, OR, NOT, IMP, IFF, VAR
 from expresion_constructor import construct_ast
 from expresion_parser import parse_bool_expression
 
@@ -29,11 +29,11 @@ class BooleanExpression:
 
     def _extract_variables(self, expr):
         """Recursively extract unique variables from the expression."""
-        if isinstance(expr, Variable):
+        if isinstance(expr, VAR):
             return {expr.name}
         elif isinstance(expr, NOT):
             return self._extract_variables(expr.expression)
-        elif isinstance(expr, (AND, OR, IMPLIES, IFF)):
+        elif isinstance(expr, (AND, OR, IMP, IFF)):
             return self._extract_variables(expr.left) | self._extract_variables(expr.right)
         return set()
     

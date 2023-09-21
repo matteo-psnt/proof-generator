@@ -86,22 +86,22 @@ class OR:
         else:
             return len(self.left) + len(self.right) + 1
     
-class IMPLIES:
+class IMP:
     def __init__(self, left, right):
         self.left = left
         self.right = right
 
     def evaluate(self, assignment):
-        return not self.left.evaluate(assignment) or self.right.evaluate(assignment)
+        return (not self.left.evaluate(assignment)) or self.right.evaluate(assignment)
 
     def __str__(self):
         return "({} => {})".format(str(self.left), str(self.right))
     
     def __repr__(self):
-        return "IMPLIES({}, {})".format(repr(self.left), repr(self.right))
+        return "IMP({}, {})".format(repr(self.left), repr(self.right))
     
     def __eq__(self, other):
-        return isinstance(other, IMPLIES) and self.left == other.left and self.right == other.right
+        return isinstance(other, IMP) and self.left == other.left and self.right == other.right
     
     def __hash__(self):
         return hash((self.left, self.right))
@@ -145,10 +145,9 @@ class IFF:
             return len(self.left) + 2
         else:
             return len(self.left) + len(self.right) + 1
-        
 
 
-class Variable:
+class VAR:
     def __init__(self, name):
         self.name = name
 
@@ -159,10 +158,10 @@ class Variable:
         return str(self.name)
     
     def __repr__(self):
-        return str(self.name)
+        return "VAR({})".format(str(self.name))
     
     def __eq__(self, other):
-        return isinstance(other, Variable) and self.name == other.name
+        return isinstance(other, VAR) and self.name == other.name
     
     def __hash__(self):
         return hash(self.name)
