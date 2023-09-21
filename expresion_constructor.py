@@ -1,4 +1,4 @@
-from logic import AND, OR, NOT, IMPLIES, IFF, Variable
+from logic import AND, OR, NOT, IMP, IFF, VAR
 
 def construct_ast(tokens):
     """
@@ -34,7 +34,7 @@ def construct_ast(tokens):
 
     # Process binary operators
     comma_hierarchy = 0
-    for op, cls in [('&', AND), ('|', OR), ('=>', IMPLIES), ('<=>', IFF)]:
+    for op, cls in [('&', AND), ('|', OR), ('=>', IMP), ('<=>', IFF)]:
         for token in tokens:
             if token == '(':
                 comma_hierarchy += 1
@@ -48,8 +48,8 @@ def construct_ast(tokens):
 
 
     # Check if it's a binary operator class
-    if isinstance(tokens[0], (NOT, AND, OR, IMPLIES, IFF)):
+    if isinstance(tokens[0], (NOT, AND, OR, IMP, IFF)):
         return tokens[0]
 
     # If we reach here, then it's a variable (leaf node)
-    return Variable(tokens[0])
+    return VAR(tokens[0])
