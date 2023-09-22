@@ -1,5 +1,5 @@
 from collections import deque
-from boolean_expresion import BooleanExpression
+from boolean_expresion import Expression
 from logic import AND, OR, NOT, IMP, IFF, VAR
 from transformational_proof_rules import rules_list
 
@@ -71,12 +71,12 @@ def find_transformation_path(start_expr, dest_expr, rules_list=rules_list, max_d
 
 if __name__ == "__main__":
     # You'll need to implement and add some rules to rules_list for this test to be meaningful.
-    expr1 = BooleanExpression("(a => ((!c) | (b => c)))").expression
-    expr2 = BooleanExpression("c | (a => (!c | ((!b) | c)))").expression
-    expr2 = BooleanExpression("c | ((!a) | ((!c) | ((!b) | c)))").expression
-    expr2 = BooleanExpression("!a").expression
+    expr1 = Expression("(a => ((!c) | (b => c)))").expression
+    expr2 = Expression("c | (a => (!c | ((!b) | c)))").expression
+    expr2 = Expression("c | ((!a) | ((!c) | ((!b) | c)))").expression
+    expr2 = Expression("!a").expression
     
-    expr1 = BooleanExpression("(a => (b & (!d))) => (!!a)").expression
+    expr1 = Expression("(a => (b & (!d))) => (!!a)").expression
     expr2 = False
     
     print("="*30)

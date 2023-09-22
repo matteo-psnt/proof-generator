@@ -1,11 +1,9 @@
-import re
 from itertools import product
-from typing import Any
 from logic import AND, OR, NOT, IMP, IFF, VAR
 from expresion_constructor import construct_ast
 from expresion_parser import parse_bool_expression
 
-class BooleanExpression:
+class Expression:
     def __init__(self, expression):
         parsed_expression = parse_bool_expression(expression)
         self.expression = construct_ast(parsed_expression)
@@ -20,7 +18,7 @@ class BooleanExpression:
         return repr(self.expression)
     
     def __eq__(self, object: object) -> bool:
-        if not isinstance(object, BooleanExpression):
+        if not isinstance(object, Expression):
             return False
         return self.expression == object.expression
 
@@ -39,7 +37,7 @@ class BooleanExpression:
     
     def logical_equivalence(self, other):
         """Check if two BooleanExpressions are logically equivalent."""
-        if isinstance(other, BooleanExpression):
+        if isinstance(other, Expression):
             return self.generate_truth_table() == other.generate_truth_table()
         else:
             return False
@@ -72,25 +70,4 @@ class BooleanExpression:
             values = ['T' if assignment[var] else 'F' for var in variables]
             result_str = 'T' if result else 'F'
             print(*values, result_str, sep=seperator)
-    
-    
-if __name__ == '__main__':
-    boolean_expressions = [
-    "A & B",
-    "!A | C",
-    "A <=> B",
-    "A & (B | C)",
-    "!A & B => C",
-    "(A | B) & (!C | D)",
-    "!A => B & C",
-    "(A & B) => !D",
-    "A | B & C | !D",
-    "!(A & B) => C | D"
-    ]
-    for expr in boolean_expressions:
-        print(expr)
-        bool_expresion = BooleanExpression(expr)
-        bool_expresion.simplify()
-        print(bool_expresion)
-        print("-"*50)
        
