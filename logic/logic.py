@@ -155,7 +155,7 @@ class IFF:
         return "IFF({}, {})".format(repr(self.left), repr(self.right))
     
     def evaluate(self, assignment):
-        return self.left.evaluate(assignment) and self.right.evaluate(assignment)
+        return (self.left.evaluate(assignment) and self.right.evaluate(assignment)) or (not self.left.evaluate(assignment) and not self.right.evaluate(assignment))
     
     def __eq__(self, other):
         return isinstance(other, IFF) and self.left == other.left and self.right == other.right
