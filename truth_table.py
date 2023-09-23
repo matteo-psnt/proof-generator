@@ -1,5 +1,5 @@
 from itertools import product
-from logic import AND, OR, NOT, IMP, IFF, VAR
+from logic.logic import AND, OR, NOT, IMP, IFF, VAR
 
 def _extract_variables(expr):
     """Recursively extract unique variables from the expression."""
@@ -20,13 +20,13 @@ def generate_truth_table(expression):
     # Generate all possible assignments for these variables
     for values in product([False, True], repeat=len(variables)):
         assignment = dict(zip(variables, values))
-        # Evaluate the expression for each assignment and store the results
-        result = evaluate(expression, assignment)
+        result = expression.evaluate(assignment)
         truth_table.append((assignment, result))
 
     return truth_table
 
 def print_truth_table(truth_table):
+    '''Print the truth table in a readable format.'''
     if not truth_table:
         return
     separator = " "

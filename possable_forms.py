@@ -1,4 +1,4 @@
-from logic import AND, OR, NOT, IMP, IFF, VAR
+from logic.logic import AND, OR, NOT, IMP, IFF, VAR
 from transformational_proof_rules import rules_list
 
 

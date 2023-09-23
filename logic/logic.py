@@ -1,4 +1,5 @@
 class VAR:
+    '''VAR(name) == name'''
     def __init__(self, name):
         self.name = name
 
@@ -21,6 +22,7 @@ class VAR:
         return 1
     
 class NOT:
+    '''NOT(expression) == (!expression)'''
     def __init__(self, expression):
         self.expression = expression
 
@@ -47,6 +49,7 @@ class NOT:
 
 
 class AND:
+    '''AND(left, right) == (left & right)'''
     def __init__(self, left, right):
         self.left = left
         self.right = right
@@ -78,6 +81,7 @@ class AND:
         
 
 class OR:
+    '''OR(left, right) == (left | right)'''
     def __init__(self, left, right):
         self.left = left
         self.right = right
@@ -108,6 +112,7 @@ class OR:
             return len(self.left) + len(self.right) + 1
     
 class IMP:
+    '''IMP(left, right) == (left => right)'''
     def __init__(self, left, right):
         self.left = left
         self.right = right
@@ -138,6 +143,7 @@ class IMP:
             return len(self.left) + len(self.right) + 1
 
 class IFF:
+    '''IFF(left, right) == (left <=> right)'''
     def __init__(self, left, right):
         self.left = left
         self.right = right

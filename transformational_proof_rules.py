@@ -1,4 +1,4 @@
-from logic import AND, OR, NOT, IMP, IFF, VAR
+from logic.logic import AND, OR, NOT, IMP, IFF, VAR
 
 class Rule:
     '''Abstract class for a rule'''

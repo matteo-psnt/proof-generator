@@ -6,8 +6,7 @@ def parse_bool_expression(expression):
     
     pattern_str = '({})'.format('|'.join(re.escape(d) for d in delimiters))
     
-    # Define a regular expression pattern
     pattern = re.compile(pattern_str)
     
-    # Split the string based on the pattern and strip unnecessary spaces
     return [item.strip() for item in re.split(pattern, expression) if item.strip()]
+

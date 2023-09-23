@@ -24,6 +24,12 @@ class TestLogicOperations(unittest.TestCase):
     def test_implies(self):
         expr = IMP(VAR('A'), VAR('B'))
         self.assertEqual(expr.evaluate(self.assignment), False)
+        
+        expr = IMP(VAR('B'), VAR('A'))
+        self.assertEqual(expr.evaluate(self.assignment), False)
+        
+        expr = IMP(VAR('A'), VAR('C'))
+        self.assertEqual(expr.evaluate(self.assignment), True)
 
     def test_iff(self):
         expr = IFF(VAR('A'), VAR('C'))
