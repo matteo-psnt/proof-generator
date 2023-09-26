@@ -1,5 +1,5 @@
 from collections import deque
-from logic.boolean_expression import Expression
+from logic.boolean_expression import get_expr_from_str
 from logic.logic import AND, OR, NOT, IMP, IFF, VAR
 from rules.transformational_proof_rules import rules_list
 
@@ -76,8 +76,8 @@ def find_transformation_path(start_expr, dest_expr, rules_list=rules_list, max_d
 
 
 if __name__ == "__main__":    
-    expr1 = Expression("(c | a) => (((!c) | b) => c)").expression
-    expr2 = Expression("!(a & !c)").expression
+    expr1 = get_expr_from_str("(c | a) => (((!c) | b) => c)")
+    expr2 = get_expr_from_str("!(a & !c)")
     print(expr1)
     print(expr2)
 
