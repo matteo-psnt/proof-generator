@@ -3,7 +3,7 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from logic.logic import AND, OR, NOT, IMP, IFF, VAR
-from logic.expression_parser import parse_bool_expression
+from logic.expression_parser import parse_bool_expression, add_parentheses
 from logic.expression_constructor import construct_ast
 
 from transformational_proof_rules import (

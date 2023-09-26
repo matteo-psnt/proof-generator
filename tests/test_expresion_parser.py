@@ -1,5 +1,5 @@
 import unittest
-from context import parse_bool_expression
+from context import parse_bool_expression, add_parentheses
 
 class TestParseBoolExpression(unittest.TestCase):
 
@@ -59,6 +59,49 @@ class TestParseBoolExpression(unittest.TestCase):
     
     def test_english_words_with_parentheses_and_spaces(self):
         self.assertEqual(parse_bool_expression('true and ( not false or true )'), ['true', '&', '(', '!', 'false', '|', 'true', ')'])
-        
+
+class TestAddParentheses(unittest.TestCase):
+
+    def test_basic_expression(self):
+        tokens = ['A', '&', 'B', '|', 'C', '=>', 'D', '<=>', 'E']
+        expected = ['(', '(', '(', '(', 'A', '&', 'B', ')', '|', 'C', ')', '=>', 'D', ')', '<=>', 'E', ')']
+        result = add_parentheses(tokens)
+        self.assertEqual(result, expected)
+
+    def test_negation(self):
+        tokens = ['!', 'A', '&', 'B']
+        expected = ['(', '(', '!', 'A', ')', '&', 'B', ')']
+        result = add_parentheses(tokens)
+        self.assertEqual(result, expected)
+
+    def test_unbalanced_parentheses(self):
+        tokens = ['(', 'A', '&', 'B']
+        with self.assertRaises(ValueError):
+            add_parentheses(tokens)
+
+    def test_empty_expression(self):
+        tokens = []
+        with self.assertRaises(ValueError):
+            add_parentheses(tokens)
+    
+    def test_associativity(self):
+        tokens = ['A', '&', 'B', '&', 'C']
+        expected = ['(', 'A', '&', '(', 'B', '&', 'C', ')', ')']
+        result = add_parentheses(tokens)
+        self.assertEqual(result, expected)
+    
+    def test_associativity2(self):
+        tokens = ['A', '|', 'B', '|', 'C']
+        expected = ['(', 'A', '|', '(', 'B', '|', 'C', ')', ')']
+        result = add_parentheses(tokens)
+        self.assertEqual(result, expected)
+    
+    def test_order_of_operations(self):
+        tokens = ['A', '&', 'B', '|', 'C']
+        expected = ['(', '(', 'A', '&', 'B', ')', '|', 'C', ')']
+        result = add_parentheses(tokens)
+        self.assertEqual(result, expected)
+    
+
 if __name__ == "__main__":
     unittest.main()
