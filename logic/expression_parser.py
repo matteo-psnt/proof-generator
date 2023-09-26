@@ -68,14 +68,9 @@ def parse_bool_expression(expression):
     for variant, standard in delimiter_mapping.items():
         expression = expression.replace(variant, standard)
     
-    print(expression)
-    
     # Create the regular expression pattern
     pattern_str = '({})'.format('|'.join(re.escape(d) for d in standard_delimiters))
     pattern = re.compile(pattern_str)
     
     # Split the expression based on the pattern and return the result
     return [item.strip() for item in re.split(pattern, expression) if item.strip()]
-
-
-print(parse_bool_expression('T ^ F ∨ ¬ TRUE'))
