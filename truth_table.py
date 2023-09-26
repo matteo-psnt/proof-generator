@@ -2,7 +2,7 @@ from itertools import product
 from logic.logic import AND, OR, NOT, IMP, IFF, VAR
 
 def _extract_variables(expr):
-    """Recursively extract unique variables from the expression."""
+    '''Recursively extract unique variables from the expression.'''
     if isinstance(expr, VAR):
         return {expr.name}
     elif isinstance(expr, NOT):
@@ -12,7 +12,7 @@ def _extract_variables(expr):
     return set()
 
 def generate_truth_table(expression):
-    """Generate a truth table for the BooleanExpression."""
+    '''Generate a truth table for the BooleanExpression.'''
 
     variables = list(_extract_variables(expression))
     truth_table = []

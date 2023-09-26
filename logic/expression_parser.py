@@ -1,7 +1,7 @@
 import re
 
 def parse_bool_expression(expression):
-    """Parse a boolean expression and return a list of boolean values."""
+    '''Parse a boolean expression and return a list of boolean values.'''
     # Define standard delimiters
     standard_delimiters = ['!', '&', '|', '=>', '<=>', '(', ')', 'true', 'false', ',']
         
