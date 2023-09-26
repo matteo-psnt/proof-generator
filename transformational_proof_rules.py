@@ -135,7 +135,7 @@ class DeMorganORReverse(Rule):
 
 class ImplicationElimination(Rule):
     '''Implication Elimination: (P⇒Q)⟺(¬P)vQ'''
-    rule_name = "imp_elim"
+    rule_name = "impl"
     
     def can_apply(self, expr):
         return isinstance(expr, IMP)
@@ -145,7 +145,7 @@ class ImplicationElimination(Rule):
 
 class ImplicationEliminationReverse(Rule):
     '''Implication Elimination: (¬P)vQ⟺(P⇒Q)'''
-    rule_name = "imp_elim"
+    rule_name = "impl"
     
     def can_apply(self, expr):
         return isinstance(expr, OR) and isinstance(expr.left, NOT)
