@@ -20,30 +20,36 @@ class Proof:
         path.reverse()
         return path
 
-def apply_rules_to_expr(expr, rules_list) -> set:
+def _apply_rules_to_expr(expr, rules_list) -> set:
     '''Helper function to apply rules to an expression and its sub-expressions'''
     results = set()
     
-    # Try applying rules to the current expression
     for rule in rules_list:
         if rule.can_apply(expr):
-            results.add(rule.apply(expr))
+            results.add((rule.rule_name, rule.apply(expr)))
     
-    # If the expression has sub-expressions, try applying rules to them
     if isinstance(expr, NOT):
-        for new_expr in apply_rules_to_expr(expr.expression, rules_list):
-            results.add(NOT(new_expr))
+        for rule_name, new_expr in _apply_rules_to_expr(expr.expression, rules_list):
+            results.add((rule_name, NOT(new_expr)))
+            
     elif isinstance(expr, (AND, OR, IMP, IFF)):
         left_expr = expr.left
         right_expr = expr.right
 
-        # Including the original expressions in the combinations
-        left_options = set([left_expr]) | apply_rules_to_expr(left_expr, rules_list)
-        right_options = set([right_expr]) | apply_rules_to_expr(right_expr, rules_list)
+        left_options = set()
+        right_options = set()
+        
+        for new_rule, new_expr in _apply_rules_to_expr(left_expr, rules_list):
+            left_options.add((new_rule, new_expr))
+        
+        for new_rule, new_expr in _apply_rules_to_expr(right_expr, rules_list):
+            right_options.add((new_rule, new_expr))
 
-        for new_left in left_options:
-            for new_right in right_options:
-                results.add(type(expr)(new_left, new_right))
+        for new_rule, new_left in left_options:
+            results.add((new_rule, type(expr)(new_left, right_expr)))
+            
+        for new_rule, new_right in right_options:
+            results.add((new_rule, type(expr)(left_expr, new_right)))
     
     return results
 
@@ -61,19 +67,17 @@ def find_transformation_path(start_expr, dest_expr, rules_list=rules_list, max_d
         if hasattr(current_expr, '__len__') and len(current_expr) > max_depth:
             continue
 
-        for new_expr in apply_rules_to_expr(current_expr, rules_list):
+        for rule_name, new_expr in _apply_rules_to_expr(current_expr, rules_list):
             if new_expr not in visited:
                 visited.add(new_expr)
-                queue.append(Proof(new_expr, rule=None, parent=current_proof, applied_sub_expr=current_expr))
+                queue.append(Proof(new_expr, rule=rule_name, parent=current_proof, applied_sub_expr=current_expr))
 
     return None
 
 
 if __name__ == "__main__":    
-    expr1 = Expression("(a => (b & (!d))) => (!!a)").expression
-    expr2 = False
-    
-    print("="*30)
+    expr1 = Expression("(c | a) => (((!c) | b) => c)").expression
+    expr2 = Expression("!(a & !c)").expression
     print(expr1)
     print(expr2)
 
@@ -82,7 +86,5 @@ if __name__ == "__main__":
         for rule, expression, applied_sub_expr in transformations:
             print(f"{expression} by {rule}")
         
-        for rule, expression, applied_sub_expr in transformations:
-            print(repr(expression) )
     else:
         print("No transformation path found.")
