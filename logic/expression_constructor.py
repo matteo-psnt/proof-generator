@@ -44,4 +44,10 @@ def construct_ast(tokens):
     if isinstance(tokens[0], (NOT, AND, OR, IMP, IFF)):
         return tokens[0]
 
+    if tokens[0] == 'true':
+        return True
+    
+    if tokens[0] == 'false':
+        return False
+
     return VAR(tokens[0])
