@@ -1,5 +1,5 @@
 from logic.logic import AND, OR, NOT, IMP, IFF, VAR
-from transformational_proof_rules import rules_list
+from rules.transformational_proof_rules import rules_list
 
 
 # Takes in a boolean statment and then creates a list of all the possible forms of that statment

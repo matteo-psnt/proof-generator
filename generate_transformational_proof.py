@@ -1,7 +1,7 @@
 from collections import deque
 from logic.boolean_expression import Expression
 from logic.logic import AND, OR, NOT, IMP, IFF, VAR
-from transformational_proof_rules import rules_list
+from rules.transformational_proof_rules import rules_list
 
 
 class Proof:
@@ -83,8 +83,9 @@ if __name__ == "__main__":
 
     transformations = find_transformation_path(expr1, expr2)
     if transformations:
-        for rule, expression, applied_sub_expr in transformations:
-            print(f"{expression} by {rule}")
+        print("1)", expr1)
+        for i, (rule, expression, applied_sub_expr) in enumerate(transformations):
+            print(f"{i + 2}) {expression} by {rule}")
         
     else:
         print("No transformation path found.")
