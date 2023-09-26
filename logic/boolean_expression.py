@@ -1,7 +1,7 @@
 from itertools import product
 from logic.logic import AND, OR, NOT, IMP, IFF, VAR
 from logic.expression_constructor import construct_ast
-from logic.expresion_parser import parse_bool_expression
+from logic.expression_parser import parse_bool_expression
 
 class Expression:
     def __init__(self, expression):
