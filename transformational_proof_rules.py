@@ -382,11 +382,3 @@ rules_list = [
     Simplification2Or(),
     Simplification2And()
 ]
-
-
-if __name__ == "__main__":
-    expr = AND(VAR("P"), VAR("Q"))
-    comm_rule = CommutativityAND()
-    if comm_rule.can_apply(expr):
-        new_expr = comm_rule.apply(expr)
-        print(new_expr)
