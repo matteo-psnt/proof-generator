@@ -18,6 +18,8 @@ def parse_bool_expression(expression):
         '||': '|',
         'TRUE' : 'true',
         'FALSE' : 'false',
+        'True' : 'true',
+        'False' : 'false',
         'NOT' : '!',
         'AND' : '&',
         'OR' : '|',
