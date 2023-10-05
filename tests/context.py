@@ -6,7 +6,7 @@ from logic.logic import AND, OR, NOT, IMP, IFF, VAR
 from logic.expression_parser import parse_bool_expression, add_parentheses
 from logic.expression_constructor import construct_ast
 
-from rules.transformational_proof_rules import (
+from rules.TP_rules import (
     CommutativityAND,
     CommutativityOR,
     CommutativityIFF,
