@@ -1,5 +1,7 @@
 from itertools import product
 from logic.logic import AND, OR, NOT, IMP, IFF, VAR
+from logic.boolean_expression import get_expr_from_str
+import argparse
 
 def _extract_variables(expr):
     '''Recursively extract unique variables from the expression.'''
@@ -39,3 +41,11 @@ def print_truth_table(truth_table):
         result_str = 'T' if result else 'F'
         print(*values, result_str, sep=separator)
 
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Generate a truth table for a Boolean expression.')
+    parser.add_argument('expression', metavar='expression', type=str, help='a Boolean expression')
+    args = parser.parse_args()
+    expr = get_expr_from_str(args.expression)
+    print(expr)
+    truth_table = generate_truth_table(expr)
+    print_truth_table(truth_table)
