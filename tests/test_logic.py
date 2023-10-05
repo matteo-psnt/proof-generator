@@ -38,7 +38,7 @@ class TestLogicOperations(unittest.TestCase):
         expr = IMP(VAR('A'), VAR('B'))
         self.assertEqual(expr.evaluate(self.assignment), False)
         expr = IMP(VAR('B'), VAR('A'))
-        self.assertEqual(expr.evaluate(self.assignment), False)
+        self.assertEqual(expr.evaluate(self.assignment), True)
         expr = IMP(VAR('A'), VAR('C'))
         self.assertEqual(expr.evaluate(self.assignment), True)
         self.assertEqual(str(expr), "(A => C)")

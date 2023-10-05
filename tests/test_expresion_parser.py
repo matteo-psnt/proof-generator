@@ -102,6 +102,17 @@ class TestAddParentheses(unittest.TestCase):
         result = add_parentheses(tokens)
         self.assertEqual(result, expected)
     
+    def test_order_of_operations2(self):
+        tokens = ['A', '&', 'B', '|', 'C', '=>', 'D', '<=>', 'E']
+        expected = ['(', '(', '(', '(', 'A', '&', 'B', ')', '|', 'C', ')', '=>', 'D', ')', '<=>', 'E', ')']
+        result = add_parentheses(tokens)
+        self.assertEqual(result, expected)
+    
+    def test_order_of_operations3(self):
+        tokens = ['!', 'A', '&', 'B', '|', '!', 'C', '=>', '!', 'D', '<=>', 'E']
+        expected = ['(', '(', '(', '(', '(', '!', 'A', ')', '&', 'B', ')', '|', '(', '!', 'C', ')', ')', '=>', '(', '!', 'D', ')', ')', '<=>', 'E', ')']
+        result = add_parentheses(tokens)
+        self.assertEqual(result, expected)
 
 if __name__ == "__main__":
     unittest.main()
