@@ -1,7 +1,7 @@
 from collections import deque
 from logic.boolean_expression import get_expr_from_str
 from logic.logic import AND, OR, NOT, IMP, IFF, VAR
-from rules.transformational_proof_rules import rules_list
+from rules.TP_rules import rules_list
 
 
 class Proof:
@@ -76,8 +76,8 @@ def find_transformation_path(start_expr, dest_expr, rules_list=rules_list, max_d
 
 
 if __name__ == "__main__":    
-    expr1 = get_expr_from_str("(c | a) => (((!c) | b) => c)")
-    expr2 = get_expr_from_str("!(a & !c)")
+    expr1 = get_expr_from_str("(!(a => (b => c))) & ((!b | !(d | a)) & !d)")
+    expr2 = get_expr_from_str("false")
     print(expr1)
     print(expr2)
 
