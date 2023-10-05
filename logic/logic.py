@@ -30,14 +30,12 @@ class NOT:
         self.expression = expression
 
     def __str__(self):
-        if isinstance(self.expression, VAR):
+        if isinstance(self.expression, VAR) or isinstance(self.expression, NOT):
             return "!{}".format(str(self.expression))
-        elif isinstance(self.expression, NOT):
-            return "!!{}".format(str(self.expression.expression))
         elif isinstance(self.expression, bool):
             return "!({})".format(str(self.expression))
         else:
-            return "(!{})".format(str(self.expression))
+            return "!({})".format(str(self.expression))
     
     def __repr__(self):
         return "NOT({})".format(repr(self.expression))
@@ -68,7 +66,7 @@ class AND:
         self.right = right
 
     def __str__(self):
-        if isinstance(self.left, VAR) and isinstance(self.right, VAR) or isinstance(self.left, bool) and isinstance(self.right, bool):
+        if isinstance(self.left, VAR) or isinstance(self.left, bool) or isinstance(self.left, NOT) and isinstance(self.right, bool) or isinstance(self.right, VAR) or isinstance(self.right, NOT):
             return "{} & {}".format(str(self.left), str(self.right))
         elif isinstance(self.left, VAR) or isinstance(self.left, bool):
             return "{} & ({})".format(str(self.left), str(self.right))
@@ -110,7 +108,7 @@ class OR:
         self.right = right
 
     def __str__(self):
-        if isinstance(self.left, VAR) and isinstance(self.right, VAR) or isinstance(self.left, bool) and isinstance(self.right, bool):
+        if isinstance(self.left, VAR) or isinstance(self.left, bool) or isinstance(self.left, NOT) and isinstance(self.right, bool) or isinstance(self.right, VAR) or isinstance(self.right, NOT):
             return "{} | {}".format(str(self.left), str(self.right))
         elif isinstance(self.left, VAR) or isinstance(self.left, bool):
             return "{} | ({})".format(str(self.left), str(self.right))
@@ -151,7 +149,7 @@ class IMP:
         self.right = right
 
     def __str__(self):
-        if isinstance(self.left, VAR) and isinstance(self.right, VAR) or isinstance(self.left, bool) and isinstance(self.right, bool):
+        if isinstance(self.left, VAR) or isinstance(self.left, bool) or isinstance(self.left, NOT) and isinstance(self.right, bool) or isinstance(self.right, VAR) or isinstance(self.right, NOT):
             return "{} => {}".format(str(self.left), str(self.right))
         elif isinstance(self.left, VAR) or isinstance(self.left, bool):
             return "{} => ({})".format(str(self.left), str(self.right))
@@ -192,7 +190,7 @@ class IFF:
         self.right = right
 
     def __str__(self):
-        if isinstance(self.left, VAR) and isinstance(self.right, VAR) or isinstance(self.left, bool) and isinstance(self.right, bool):
+        if isinstance(self.left, VAR) or isinstance(self.left, bool) or isinstance(self.left, NOT) and isinstance(self.right, bool) or isinstance(self.right, VAR) or isinstance(self.right, NOT):
             return "{} <=> {}".format(str(self.left), str(self.right))
         elif isinstance(self.left, VAR) or isinstance(self.left, bool):
             return "{} <=> ({})".format(str(self.left), str(self.right))
