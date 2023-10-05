@@ -15,7 +15,8 @@ class TestLogicOperations(unittest.TestCase):
         self.assertEqual(expr.evaluate(self.assignment), False)
         expr = NOT(VAR('B'))
         self.assertEqual(expr.evaluate(self.assignment), True)
-        self.assertEqual(str(expr), "(!B)")
+        self.assertEqual(expr.comma_format(), "(!B)")
+        self.assertEqual(str(expr), "!B")
         self.assertEqual(repr(expr), "NOT(VAR(B))")
 
     def test_and(self):
@@ -23,7 +24,8 @@ class TestLogicOperations(unittest.TestCase):
         self.assertEqual(expr.evaluate(self.assignment), True)
         expr = AND(VAR('A'), VAR('B'))
         self.assertEqual(expr.evaluate(self.assignment), False)
-        self.assertEqual(str(expr), "(A & B)")
+        self.assertEqual(expr.comma_format(), "(A & B)")
+        self.assertEqual(str(expr), "A & B")
         self.assertEqual(repr(expr), "AND(VAR(A), VAR(B))")
 
     def test_or(self):
@@ -31,7 +33,8 @@ class TestLogicOperations(unittest.TestCase):
         self.assertEqual(expr.evaluate(self.assignment), False)
         expr = OR(VAR('A'), VAR('C'))
         self.assertEqual(expr.evaluate(self.assignment), True)
-        self.assertEqual(str(expr), "(A | C)")
+        self.assertEqual(expr.comma_format(), "(A | C)")
+        self.assertEqual(str(expr), "A | C")
         self.assertEqual(repr(expr), "OR(VAR(A), VAR(C))")
 
     def test_implies(self):
@@ -41,7 +44,8 @@ class TestLogicOperations(unittest.TestCase):
         self.assertEqual(expr.evaluate(self.assignment), True)
         expr = IMP(VAR('A'), VAR('C'))
         self.assertEqual(expr.evaluate(self.assignment), True)
-        self.assertEqual(str(expr), "(A => C)")
+        self.assertEqual(expr.comma_format(), "(A => C)")
+        self.assertEqual(str(expr), "A => C")
         self.assertEqual(repr(expr), "IMP(VAR(A), VAR(C))")
 
     def test_iff(self):
@@ -51,7 +55,8 @@ class TestLogicOperations(unittest.TestCase):
         self.assertEqual(expr.evaluate(self.assignment), True)
         expr = IFF(VAR('A'), VAR('C'))
         self.assertEqual(expr.evaluate(self.assignment), True)
-        self.assertEqual(str(expr), "(A <=> C)")
+        self.assertEqual(expr.comma_format(), "(A <=> C)")
+        self.assertEqual(str(expr), "A <=> C")
         self.assertEqual(repr(expr), "IFF(VAR(A), VAR(C))")
 
     def test_variable(self):
@@ -59,18 +64,21 @@ class TestLogicOperations(unittest.TestCase):
         self.assertEqual(var.evaluate(self.assignment), True)
         var = VAR('B')
         self.assertEqual(var.evaluate(self.assignment), False)
+        self.assertEqual(var.comma_format(), "B")
         self.assertEqual(str(var), "B")
         self.assertEqual(repr(var), "VAR(B)")
 
     def test_nested_expressions(self):
         expr = OR(AND(VAR('A'), VAR('B')), NOT(VAR('C')))
         self.assertEqual(expr.evaluate(self.assignment), False)
-        self.assertEqual(str(expr), "((A & B) | (!C))")
+        self.assertEqual(expr.comma_format(), "((A & B) | (!C))")
+        self.assertEqual(str(expr), "(A & B) | (!C)")
         self.assertEqual(repr(expr), "OR(AND(VAR(A), VAR(B)), NOT(VAR(C)))")
 
     def test_len_method(self):
         expr = AND(VAR('A'), VAR('B'))
         self.assertEqual(len(expr), 3)
+        expr = AND(VAR('A'), VAR('B'))
 
 if __name__ == '__main__':
     unittest.main()

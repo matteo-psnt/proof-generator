@@ -9,6 +9,9 @@ class VAR:
     def __repr__(self):
         return "VAR({})".format(str(self.name))
     
+    def comma_format(self):
+        return str(self.name)
+    
     def evaluate(self, assignment):
         return assignment[self.name]
     
@@ -27,10 +30,20 @@ class NOT:
         self.expression = expression
 
     def __str__(self):
-        return "(!{})".format(str(self.expression))
+        if isinstance(self.expression, VAR):
+            return "!{}".format(str(self.expression))
+        elif isinstance(self.expression, NOT):
+            return "!!{}".format(str(self.expression.expression))
+        elif isinstance(self.expression, bool):
+            return "!({})".format(str(self.expression))
+        else:
+            return "(!{})".format(str(self.expression))
     
     def __repr__(self):
         return "NOT({})".format(repr(self.expression))
+    
+    def comma_format(self):
+        return "(!{})".format(self.expression.comma_format())
     
     def evaluate(self, assignment):
         return not self.expression.evaluate(assignment)
@@ -55,10 +68,20 @@ class AND:
         self.right = right
 
     def __str__(self):
-        return "({} & {})".format(str(self.left), str(self.right))
+        if isinstance(self.left, VAR) and isinstance(self.right, VAR) or isinstance(self.left, bool) and isinstance(self.right, bool):
+            return "{} & {}".format(str(self.left), str(self.right))
+        elif isinstance(self.left, VAR) or isinstance(self.left, bool):
+            return "{} & ({})".format(str(self.left), str(self.right))
+        elif isinstance(self.right, VAR or isinstance(self.right, bool)):
+            return "({}) & {}".format(str(self.left), str(self.right))
+        else:
+            return "({}) & ({})".format(str(self.left), str(self.right))
     
     def __repr__(self):
         return "AND({}, {})".format(repr(self.left), repr(self.right))
+    
+    def comma_format(self):
+        return "({} & {})".format(self.left.comma_format(), self.right.comma_format())
     
     def evaluate(self, assignment):
         return self.left.evaluate(assignment) and self.right.evaluate(assignment)
@@ -87,13 +110,23 @@ class OR:
         self.right = right
 
     def __str__(self):
-        return "({} | {})".format(str(self.left), str(self.right))
+        if isinstance(self.left, VAR) and isinstance(self.right, VAR) or isinstance(self.left, bool) and isinstance(self.right, bool):
+            return "{} | {}".format(str(self.left), str(self.right))
+        elif isinstance(self.left, VAR) or isinstance(self.left, bool):
+            return "{} | ({})".format(str(self.left), str(self.right))
+        elif isinstance(self.right, VAR or isinstance(self.right, bool)):
+            return "({}) | {}".format(str(self.left), str(self.right))
+        else:
+            return "({}) | ({})".format(str(self.left), str(self.right))
     
     def __repr__(self):
         return "OR({}, {})".format(repr(self.left), repr(self.right))
     
+    def comma_format(self):
+        return "({} | {})".format(self.left.comma_format(), self.right.comma_format())
+    
     def evaluate(self, assignment):
-        return self.left.evaluate(assignment) and self.right.evaluate(assignment)
+        return self.left.evaluate(assignment) or self.right.evaluate(assignment)
 
     def __eq__(self, other):
         return isinstance(other, OR) and self.left == other.left and self.right == other.right
@@ -118,13 +151,23 @@ class IMP:
         self.right = right
 
     def __str__(self):
-        return "({} => {})".format(str(self.left), str(self.right))
+        if isinstance(self.left, VAR) and isinstance(self.right, VAR) or isinstance(self.left, bool) and isinstance(self.right, bool):
+            return "{} => {}".format(str(self.left), str(self.right))
+        elif isinstance(self.left, VAR) or isinstance(self.left, bool):
+            return "{} => ({})".format(str(self.left), str(self.right))
+        elif isinstance(self.right, VAR or isinstance(self.right, bool)):
+            return "({}) => {}".format(str(self.left), str(self.right))
+        else:
+            return "({}) => ({})".format(str(self.left), str(self.right))
     
     def __repr__(self):
         return "IMP({}, {})".format(repr(self.left), repr(self.right))
     
+    def comma_format(self):
+        return "({} => {})".format(self.left.comma_format(), self.right.comma_format())
+    
     def evaluate(self, assignment):
-        return self.left.evaluate(assignment) and self.right.evaluate(assignment)
+        return (not self.left.evaluate(assignment)) or self.right.evaluate(assignment)
     
     def __eq__(self, other):
         return isinstance(other, IMP) and self.left == other.left and self.right == other.right
@@ -149,10 +192,20 @@ class IFF:
         self.right = right
 
     def __str__(self):
-        return "({} <=> {})".format(str(self.left), str(self.right))
+        if isinstance(self.left, VAR) and isinstance(self.right, VAR) or isinstance(self.left, bool) and isinstance(self.right, bool):
+            return "{} <=> {}".format(str(self.left), str(self.right))
+        elif isinstance(self.left, VAR) or isinstance(self.left, bool):
+            return "{} <=> ({})".format(str(self.left), str(self.right))
+        elif isinstance(self.right, VAR or isinstance(self.right, bool)):
+            return "({}) <=> {}".format(str(self.left), str(self.right))
+        else:
+            return "({}) <=> ({})".format(str(self.left), str(self.right))
     
     def __repr__(self):
         return "IFF({}, {})".format(repr(self.left), repr(self.right))
+    
+    def comma_format(self):
+        return "({} <=> {})".format(self.left.comma_format(), self.right.comma_format())
     
     def evaluate(self, assignment):
         return (self.left.evaluate(assignment) and self.right.evaluate(assignment)) or (not self.left.evaluate(assignment) and not self.right.evaluate(assignment))
