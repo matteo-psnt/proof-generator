@@ -1,6 +1,4 @@
-.vscode/settings.json
-__pycache__/
-.coverage
-test.py
-possable_forms_ND.py
-possable_forms_TP.py
+.vscode
+.DS_Store
+node_modules
+dist
