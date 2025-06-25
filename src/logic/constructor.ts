@@ -206,7 +206,7 @@ function parsePrimary(tokens: Token[], startIndex: number): ParseResult {
 function isValidVariableName(token: string): boolean {
   // Variables should be alphanumeric strings that aren't reserved words
   const reservedWords = ['true', 'false', '&', '|', '!', '=>', '<=>', '(', ')'];
-  return !reservedWords.includes(token) && /^[a-zA-Z][a-zA-Z0-9_]*$/.test(token);
+  return !reservedWords.includes(token) && /^[a-zA-Z]\w*$/.test(token);
 }
 
 /**

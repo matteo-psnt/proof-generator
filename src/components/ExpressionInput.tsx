@@ -20,7 +20,7 @@ export function ExpressionInput({
   variant = 'default',
   title = 'Enter Boolean Expression',
   placeholder = 'Enter a Boolean expression (e.g., (a & b) | !c)',
-}: ExpressionInputProps) {
+}: Readonly<ExpressionInputProps>) {
   const { currentExpression, currentExpressionString, expressionError, setCurrentExpression } =
     useAppStore();
 

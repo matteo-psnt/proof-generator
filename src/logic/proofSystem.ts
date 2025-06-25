@@ -338,8 +338,8 @@ export function formatTransformationProof(proof: TransformationProof): string {
 
   // Calculate the maximum width needed for step number + expression part
   let maxStepWidth = 0;
-  for (let i = 0; i < proof.steps.length; i++) {
-    const step = proof.steps[i];
+  for (const element of proof.steps) {
+    const step = element;
     const stepPrefix = `${step.stepNumber}) ${step.expression.toString()}`;
     maxStepWidth = Math.max(maxStepWidth, stepPrefix.length);
   }
@@ -357,7 +357,7 @@ export function formatTransformationProof(proof: TransformationProof): string {
       result += `${stepPrefix}\n`;
     } else {
       // Subsequent steps show rule category, aligned
-      const ruleName = step.rule?.category || 'unknown';
+      const ruleName = step.rule?.category ?? 'unknown';
       const padding = ' '.repeat(Math.max(1, alignmentPosition - stepPrefix.length));
       result += `${stepPrefix}${padding}by ${ruleName}\n`;
     }
@@ -376,8 +376,8 @@ export function isTransformationPossible(
 ): boolean {
   const proof = findTransformationProof(startExpression, targetExpression, {
     ...options,
-    maxDepth: Math.min(options.maxDepth || 10, 10), // Limit depth for quick check
-    maxStates: Math.min(options.maxStates || 1000, 1000), // Limit states for quick check
+    maxDepth: Math.min(options.maxDepth ?? 10, 10), // Limit depth for quick check
+    maxStates: Math.min(options.maxStates ?? 1000, 1000), // Limit states for quick check
   });
 
   return proof.found;

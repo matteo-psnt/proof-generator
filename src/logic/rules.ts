@@ -343,7 +343,7 @@ export class CommutativityANDAND extends Rule {
     if (!isConjunction(expression) || !isConjunction(expression.left)) {
       throw new Error('Cannot apply AND-AND commutativity');
     }
-    const left = expression.left as Conjunction;
+    const left = expression.left;
     return new Conjunction(left.right, new Conjunction(left.left, expression.right));
   }
 }
@@ -361,7 +361,7 @@ export class CommutativityOROR extends Rule {
     if (!isDisjunction(expression) || !isDisjunction(expression.left)) {
       throw new Error('Cannot apply OR-OR commutativity');
     }
-    const left = expression.left as Disjunction;
+    const left = expression.left;
     return new Disjunction(left.right, new Disjunction(left.left, expression.right));
   }
 }

@@ -182,21 +182,31 @@ export function TruthTableView() {
             </div>
 
             <div className="text-center">
-              <div
-                className={`text-2xl font-bold ${
-                  analysis.isTautology
-                    ? 'text-green-600'
-                    : analysis.isContradiction
-                      ? 'text-red-600'
-                      : 'text-yellow-600'
-                }`}
-              >
-                {analysis.isTautology
-                  ? 'Tautology'
-                  : analysis.isContradiction
-                    ? 'Contradiction'
-                    : 'Contingent'}
-              </div>
+              {(() => {
+                let analysisTypeClass = '';
+                if (analysis.isTautology) {
+                  analysisTypeClass = 'text-green-600';
+                } else if (analysis.isContradiction) {
+                  analysisTypeClass = 'text-red-600';
+                } else {
+                  analysisTypeClass = 'text-yellow-600';
+                }
+
+                let analysisTypeLabel = '';
+                if (analysis.isTautology) {
+                  analysisTypeLabel = 'Tautology';
+                } else if (analysis.isContradiction) {
+                  analysisTypeLabel = 'Contradiction';
+                } else {
+                  analysisTypeLabel = 'Contingent';
+                }
+
+                return (
+                  <div className={`text-2xl font-bold ${analysisTypeClass}`}>
+                    {analysisTypeLabel}
+                  </div>
+                );
+              })()}
               <div className="text-sm text-gray-600">Type</div>
             </div>
 
@@ -232,37 +242,49 @@ export function TruthTableView() {
                 </tr>
               </thead>
               <tbody>
-                {truthTable.rows.map((row: TruthTableRow, index: number) => (
-                  <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                    {truthTable.variables.map((variable: string) => (
-                      <td
-                        key={variable}
-                        className="border border-gray-300 px-4 py-2 font-mono text-center"
-                      >
-                        {useSymbolsInTruthTable
-                          ? row.assignment[variable]
-                            ? 'T'
-                            : 'F'
-                          : row.assignment[variable]
-                            ? 'true'
-                            : 'false'}
-                      </td>
-                    ))}
-                    <td
-                      className={`border border-gray-300 px-4 py-2 font-mono text-center font-bold ${
-                        row.result ? 'text-green-600' : 'text-red-600'
-                      }`}
+                {truthTable.rows.map((row: TruthTableRow) => {
+                  const rowKey =
+                    JSON.stringify(row.assignment) + '-' + String(row.result);
+                  const rowIndex = truthTable.rows.findIndex(
+                    (r) =>
+                      JSON.stringify(r.assignment) ===
+                        JSON.stringify(row.assignment) && r.result === row.result
+                  );
+                  return (
+                    <tr
+                      key={rowKey}
+                      className={rowIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
                     >
-                      {useSymbolsInTruthTable
-                        ? row.result
-                          ? 'T'
-                          : 'F'
-                        : row.result
-                          ? 'true'
-                          : 'false'}
-                    </td>
-                  </tr>
-                ))}
+                      {truthTable.variables.map((variable: string) => (
+                        <td
+                          key={variable}
+                          className="border border-gray-300 px-4 py-2 font-mono text-center"
+                        >
+                          {(() => {
+                            if (useSymbolsInTruthTable) {
+                              return row.assignment[variable] ? 'T' : 'F';
+                            } else {
+                              return row.assignment[variable] ? 'true' : 'false';
+                            }
+                          })()}
+                        </td>
+                      ))}
+                      <td
+                        className={`border border-gray-300 px-4 py-2 font-mono text-center font-bold ${
+                          row.result ? 'text-green-600' : 'text-red-600'
+                        }`}
+                      >
+                        {(() => {
+                          if (useSymbolsInTruthTable) {
+                            return row.result ? 'T' : 'F';
+                          } else {
+                            return row.result ? 'true' : 'false';
+                          }
+                        })()}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

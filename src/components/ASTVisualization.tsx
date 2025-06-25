@@ -255,7 +255,7 @@ function convertExpressionToNodes(
   return { nodes, edges, width: currentWidth };
 }
 
-export default function ASTVisualization({ expression, className = '' }: ASTVisualizationProps) {
+export default function ASTVisualization({ expression, className = '' }: Readonly<ASTVisualizationProps>) {
   const reactFlowInstance = useRef<ReactFlowInstance | null>(null);
 
   const { nodes: initialNodes, edges: initialEdges } = useMemo(() => {

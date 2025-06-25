@@ -322,7 +322,7 @@ export const useAppStore = create<AppStore>()(
     },
 
     // Proof system
-    searchForProof: async () => {
+    searchForProof: () => {
       const { currentExpression, targetExpression, selectedRules, maxProofDepth } = get();
 
       if (!currentExpression || !targetExpression) {
@@ -332,38 +332,34 @@ export const useAppStore = create<AppStore>()(
 
       set({ isSearchingProof: true, proofSearchProgress: null, currentProof: null });
 
-      try {
-        // Get selected rules
-        const activeRules = ALL_TRANSFORMATION_RULES.filter((rule) => selectedRules.has(rule.name));
+      // Get selected rules
+      const activeRules = ALL_TRANSFORMATION_RULES.filter((rule) => selectedRules.has(rule.name));
 
-        // Search for proof with progress callback
-        const proof = await new Promise<TransformationProof>((resolve) => {
-          // Use setTimeout to make this async and allow UI updates
-          setTimeout(() => {
-            const result = findTransformationProof(currentExpression, targetExpression, {
-              maxDepth: maxProofDepth,
-              rules: activeRules,
-              onProgress: (statesExplored, depth) => {
-                set({ proofSearchProgress: { statesExplored, depth } });
-              },
-            });
-            resolve(result);
-          }, 10);
-        });
+      // Search for proof with progress callback asynchronously
+      setTimeout(() => {
+        try {
+          const proof = findTransformationProof(currentExpression, targetExpression, {
+            maxDepth: maxProofDepth,
+            rules: activeRules,
+            onProgress: (statesExplored, depth) => {
+              set({ proofSearchProgress: { statesExplored, depth } });
+            },
+          });
 
-        set({
-          currentProof: proof,
-          isSearchingProof: false,
-          proofSearchProgress: null,
-        });
-      } catch (error) {
-        console.error('Error searching for proof:', error);
-        set({
-          isSearchingProof: false,
-          proofSearchProgress: null,
-          currentProof: null,
-        });
-      }
+          set({
+            currentProof: proof,
+            isSearchingProof: false,
+            proofSearchProgress: null,
+          });
+        } catch (error) {
+          console.error('Error searching for proof:', error);
+          set({
+            isSearchingProof: false,
+            proofSearchProgress: null,
+            currentProof: null,
+          });
+        }
+      }, 10);
     },
 
     cancelProofSearch: () => {

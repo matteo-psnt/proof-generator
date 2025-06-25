@@ -97,11 +97,16 @@ export function ASTInput() {
 
         {/* Quick Examples */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Quick examples</label>
-          <div className="flex flex-wrap gap-2">
-            {quickExamples.map((example, index) => (
+          <label
+            htmlFor="quick-examples"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
+            Quick examples
+          </label>
+          <div id="quick-examples" className="flex flex-wrap gap-2">
+            {quickExamples.map((example) => (
               <button
-                key={index}
+                key={example}
                 onClick={() => handleQuickExample(example)}
                 className="px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md transition-colors duration-200 font-mono"
               >

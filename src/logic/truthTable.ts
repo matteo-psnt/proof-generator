@@ -51,12 +51,12 @@ export interface TruthTable {
  * Generate a complete truth table for a Boolean expression
  */
 export function generateTruthTable(expression: BooleanExpression): TruthTable {
-  const variables = Array.from(expression.getVariables()).sort();
+  const variables = Array.from(expression.getVariables()).sort((a, b) => a.localeCompare(b));
 
   // Validate variable count
   const validation = validateVariableCount(expression);
   if (!validation.valid) {
-    throw new Error(validation.error!);
+    throw new Error(validation.error);
   }
 
   const rows: TruthTableRow[] = [];
@@ -209,7 +209,7 @@ export function areExpressionsEquivalent(
   const vars1 = expr1.getVariables();
   const vars2 = expr2.getVariables();
   const allVars = new Set([...vars1, ...vars2]);
-  const variables = Array.from(allVars).sort();
+  const variables = Array.from(allVars).sort((a, b) => a.localeCompare(b));
 
   // Generate all possible assignments
   const numRows = Math.pow(2, variables.length);
@@ -244,7 +244,7 @@ export function areExpressionsEquivalent(
  * Generate a compact truth table representation for small expressions
  */
 export function generateCompactTruthTable(expression: BooleanExpression): string {
-  const variables = Array.from(expression.getVariables()).sort();
+  const variables = Array.from(expression.getVariables()).sort((a, b) => a.localeCompare(b));
 
   if (variables.length === 0) {
     // Expression is a constant

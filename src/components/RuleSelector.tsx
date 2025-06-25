@@ -20,7 +20,7 @@ export function RuleSelector({
   onRuleToggle,
   onSelectAll,
   onDeselectAll,
-}: RuleSelectorProps) {
+}: Readonly<RuleSelectorProps>) {
   const allSelected = selectedRules.size === ALL_TRANSFORMATION_RULES.length;
   const noneSelected = selectedRules.size === 0;
 
@@ -65,6 +65,7 @@ export function RuleSelector({
                     checked={selectedRules.has(rule.name)}
                     onChange={() => onRuleToggle(rule.name)}
                     className="mt-1 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                    aria-label={rule.name}
                   />
 
                   <div className="flex-1 min-w-0">

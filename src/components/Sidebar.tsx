@@ -44,7 +44,7 @@ const tabs = [
   },
 ];
 
-export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
+export function Sidebar({ activeTab, onTabChange }: Readonly<SidebarProps>) {
   return (
     <div className="w-64 bg-white border-r border-gray-200 flex flex-col h-screen sticky top-0">
       {/* Header */}

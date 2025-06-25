@@ -83,7 +83,7 @@ export function parseExpression(expression: string): Token[] {
 
   for (const [variant, standard] of sortedEntries) {
     // Handle Unicode symbols and multi-character symbols differently from word-based tokens
-    if (variant.match(/[^\w\s]/)) {
+    if (RegExp(/[^\w\s]/).exec(variant)) {
       // For Unicode symbols and special characters (like ->, <->, <=>), use global replacement
       const regex = new RegExp(escapeRegExp(variant), 'g');
       processedExpr = processedExpr.replace(regex, ` ${standard} `);

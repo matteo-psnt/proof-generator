@@ -17,7 +17,7 @@ interface MainContentProps {
   className?: string;
 }
 
-export function MainContent({ activeTab, className }: MainContentProps) {
+export function MainContent({ activeTab, className }: Readonly<MainContentProps>) {
   const { currentExpression } = useAppStore();
 
   return (
