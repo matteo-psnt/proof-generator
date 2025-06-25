@@ -4,29 +4,29 @@
  * Interface for finding and displaying transformation proofs between expressions.
  */
 
-import React, { useState, useEffect } from "react";
-import { Play, Square, Copy, Settings, ChevronDown, ChevronUp, Info } from "lucide-react";
-import { RuleSelector } from "./RuleSelector";
-import { useAppStore } from "../store/appStore";
+import React, { useState, useEffect } from 'react';
+import { Play, Square, Copy, Settings, ChevronDown, ChevronUp, Info } from 'lucide-react';
+import { RuleSelector } from './RuleSelector';
+import { useAppStore } from '../store/appStore';
 import {
   findTransformationProof,
   formatTransformationProof,
   TransformationProof,
   ProofStep,
-} from "../logic/proofSystem";
-import { parseToExpression, validateExpression } from "../logic";
-import { ALL_TRANSFORMATION_RULES } from "../logic/rules";
+} from '../logic/proofSystem';
+import { parseToExpression, validateExpression } from '../logic';
+import { ALL_TRANSFORMATION_RULES } from '../logic/rules';
 
 export function ProofView() {
-  const { 
+  const {
     startExpressionString,
     startExpressionError,
     targetExpressionString,
     targetExpressionError,
     setStartExpression,
-    setTargetExpression
+    setTargetExpression,
   } = useAppStore();
-  
+
   const [proof, setProof] = useState<TransformationProof | null>(null);
   const [isSearching, setIsSearching] = useState(false);
   const [selectedRules, setSelectedRules] = useState(
@@ -43,8 +43,8 @@ export function ProofView() {
 
   // Helper function to safely parse expression and get length
   const getExpressionLength = (value: string): number => {
-    if (value.trim() === "") return 0;
-    
+    if (value.trim() === '') return 0;
+
     const validation = validateExpression(value);
     if (validation.valid) {
       try {
@@ -60,17 +60,17 @@ export function ProofView() {
   // Automatically update maxExpressionLength based on start and target expressions
   useEffect(() => {
     if (!autoCalculateLength) return;
-    
+
     let maxLength = 0;
-    
+
     // Get length of start expression if valid
     const startLength = getExpressionLength(startExpressionString);
     maxLength = Math.max(maxLength, startLength);
-    
+
     // Get length of target expression if valid
     const targetLength = getExpressionLength(targetExpressionString);
     maxLength = Math.max(maxLength, targetLength);
-    
+
     // Set maxExpressionLength to +1 longer than the longest expression, minimum 10
     const newMaxLength = Math.max(10, maxLength + 1);
     setMaxExpressionLength(newMaxLength);
@@ -85,11 +85,8 @@ export function ProofView() {
     // When switching to auto, the other useEffect will handle the calculation
   }, [autoCalculateLength, manualMaxLength]);
 
-  const validateInput = (
-    value: string,
-    setError: (error: string | null) => void
-  ) => {
-    if (value.trim() === "") {
+  const validateInput = (value: string, setError: (error: string | null) => void) => {
+    if (value.trim() === '') {
       setError(null);
       return null;
     }
@@ -101,12 +98,12 @@ export function ProofView() {
         setError(null);
         return parsed;
       } catch (err) {
-        const errorMsg = err instanceof Error ? err.message : "Parse error";
+        const errorMsg = err instanceof Error ? err.message : 'Parse error';
         setError(errorMsg);
         return null;
       }
     } else {
-      setError(validation.error || "Invalid expression");
+      setError(validation.error || 'Invalid expression');
       return null;
     }
   };
@@ -149,9 +146,7 @@ export function ProofView() {
         return;
       }
 
-      const activeRules = ALL_TRANSFORMATION_RULES.filter((rule) =>
-        selectedRules.has(rule.name)
-      );
+      const activeRules = ALL_TRANSFORMATION_RULES.filter((rule) => selectedRules.has(rule.name));
 
       const result = findTransformationProof(startExpr, targetExpr, {
         maxDepth,
@@ -172,7 +167,7 @@ export function ProofView() {
       }
     } catch (error) {
       if (error instanceof Error && error.message !== 'Search cancelled') {
-        console.error("Error searching for proof:", error);
+        console.error('Error searching for proof:', error);
       }
     } finally {
       setIsSearching(false);
@@ -205,17 +200,12 @@ export function ProofView() {
     <div className="space-y-6">
       {/* Input Section */}
       <div className="card">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">
-          Find Transformation Proof
-        </h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Find Transformation Proof</h3>
 
         <div className="space-y-4">
           {/* Start Expression */}
           <div>
-            <label
-              htmlFor="start-expr"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
+            <label htmlFor="start-expr" className="block text-sm font-medium text-gray-700 mb-2">
               Start Expression
             </label>
             <input
@@ -225,7 +215,7 @@ export function ProofView() {
               onChange={(e) => handleStartChange(e.target.value)}
               placeholder="e.g., !(a & b)"
               className={`input font-mono ${
-                startExpressionError ? "border-red-300 focus:ring-red-500" : ""
+                startExpressionError ? 'border-red-300 focus:ring-red-500' : ''
               }`}
             />
             {startExpressionError && (
@@ -235,10 +225,7 @@ export function ProofView() {
 
           {/* Target Expression */}
           <div>
-            <label
-              htmlFor="target-expr"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
+            <label htmlFor="target-expr" className="block text-sm font-medium text-gray-700 mb-2">
               Target Expression
             </label>
             <input
@@ -248,7 +235,7 @@ export function ProofView() {
               onChange={(e) => handleTargetChange(e.target.value)}
               placeholder="e.g., !a | !b"
               className={`input font-mono ${
-                targetExpressionError ? "border-red-300 focus:ring-red-500" : ""
+                targetExpressionError ? 'border-red-300 focus:ring-red-500' : ''
               }`}
             />
             {targetExpressionError && (
@@ -262,25 +249,18 @@ export function ProofView() {
             <div className="flex flex-col items-start space-y-2">
               <div className="flex space-x-2">
                 {isSearching ? (
-                  <button
-                    onClick={handleCancelSearch}
-                    className="btn-secondary"
-                  >
+                  <button onClick={handleCancelSearch} className="btn-secondary">
                     <Square className="h-4 w-4 mr-2" />
                     Cancel
                   </button>
                 ) : (
-                  <button
-                    onClick={handleSearch}
-                    disabled={!canSearch}
-                    className="btn-primary"
-                  >
+                  <button onClick={handleSearch} disabled={!canSearch} className="btn-primary">
                     <Play className="h-4 w-4 mr-2" />
                     Find Proof
                   </button>
                 )}
               </div>
-              
+
               {/* Advanced options toggle */}
               <button
                 onClick={() => setShowAdvancedOptions(!showAdvancedOptions)}
@@ -325,9 +305,7 @@ export function ProofView() {
             setProof(null);
           }}
           onSelectAll={() => {
-            setSelectedRules(
-              new Set(ALL_TRANSFORMATION_RULES.map((r) => r.name))
-            );
+            setSelectedRules(new Set(ALL_TRANSFORMATION_RULES.map((r) => r.name)));
             setProof(null);
           }}
           onDeselectAll={() => {
@@ -342,19 +320,14 @@ export function ProofView() {
         <div className="card bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
           <div className="flex items-center space-x-2 mb-4">
             <Settings className="h-5 w-5 text-blue-600" />
-            <h3 className="text-lg font-semibold text-gray-900">
-              Advanced Search Options
-            </h3>
+            <h3 className="text-lg font-semibold text-gray-900">Advanced Search Options</h3>
           </div>
-          
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Max Depth */}
             <div className="space-y-3">
               <div className="flex items-center space-x-2">
-                <label
-                  htmlFor="max-depth"
-                  className="text-sm font-medium text-gray-700"
-                >
+                <label htmlFor="max-depth" className="text-sm font-medium text-gray-700">
                   Max Search Depth
                 </label>
                 <div className="group relative">
@@ -396,10 +369,9 @@ export function ProofView() {
                   <div className="group relative">
                     <Info className="h-4 w-4 text-gray-400 cursor-help" />
                     <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
-                      {autoCalculateLength 
-                        ? "Auto-calculated as max(start, target) length + 1, minimum 10"
-                        : "Manually set maximum expression complexity limit"
-                      }
+                      {autoCalculateLength
+                        ? 'Auto-calculated as max(start, target) length + 1, minimum 10'
+                        : 'Manually set maximum expression complexity limit'}
                     </div>
                   </div>
                 </div>
@@ -427,7 +399,7 @@ export function ProofView() {
                   <span className="text-xs text-gray-600">Auto</span>
                 </div>
               </div>
-              
+
               {autoCalculateLength ? (
                 <div className="flex items-center space-x-3">
                   <div className="flex-1 h-2 bg-green-200 rounded-lg relative">
@@ -459,22 +431,18 @@ export function ProofView() {
                   </div>
                 </div>
               )}
-              
+
               <div className="text-xs text-gray-600">
-                {autoCalculateLength 
-                  ? "Automatically set to +1 longer than the longest input expression (minimum 10)"
-                  : "Controls complexity limit during proof search. If no proof is found, try increasing this - some solutions require longer intermediate steps."
-                }
+                {autoCalculateLength
+                  ? 'Automatically set to +1 longer than the longest input expression (minimum 10)'
+                  : 'Controls complexity limit during proof search. If no proof is found, try increasing this - some solutions require longer intermediate steps.'}
               </div>
             </div>
 
             {/* Max States */}
             <div className="space-y-3">
               <div className="flex items-center space-x-2">
-                <label
-                  htmlFor="max-states"
-                  className="text-sm font-medium text-gray-700"
-                >
+                <label htmlFor="max-states" className="text-sm font-medium text-gray-700">
                   Max States
                 </label>
                 <div className="group relative">
@@ -527,7 +495,7 @@ export function ProofView() {
         <div className="card">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-900">
-              {proof.found ? "Transformation Proof Found" : "No Proof Found"}
+              {proof.found ? 'Transformation Proof Found' : 'No Proof Found'}
             </h3>
 
             {proof.found && (
@@ -548,17 +516,13 @@ export function ProofView() {
                 <div className="space-y-2 font-mono text-sm">
                   {proof.steps.map((step: ProofStep, index: number) => (
                     <div key={index} className="flex items-start space-x-3">
-                      <span className="text-gray-500 min-w-[2rem]">
-                        {step.stepNumber}.
-                      </span>
+                      <span className="text-gray-500 min-w-[2rem]">{step.stepNumber}.</span>
                       <div className="flex-1">
                         <div className="expression text-gray-900 mb-1">
                           {step.expression.toString()}
                         </div>
                         {step.rule && (
-                          <div className="text-xs text-blue-600">
-                            by {step.rule.name}
-                          </div>
+                          <div className="text-xs text-blue-600">by {step.rule.name}</div>
                         )}
                       </div>
                     </div>
@@ -569,21 +533,15 @@ export function ProofView() {
               {/* Proof Statistics */}
               <div className="grid grid-cols-3 gap-4 text-sm">
                 <div className="text-center">
-                  <div className="text-lg font-bold text-green-600">
-                    {proof.steps.length - 1}
-                  </div>
+                  <div className="text-lg font-bold text-green-600">{proof.steps.length - 1}</div>
                   <div className="text-gray-600">Steps</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-lg font-bold text-blue-600">
-                    {proof.totalStatesExplored}
-                  </div>
+                  <div className="text-lg font-bold text-blue-600">{proof.totalStatesExplored}</div>
                   <div className="text-gray-600">States Explored</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-lg font-bold text-purple-600">
-                    {proof.searchDepth}
-                  </div>
+                  <div className="text-lg font-bold text-purple-600">{proof.searchDepth}</div>
                   <div className="text-gray-600">Max Depth</div>
                 </div>
               </div>
@@ -594,8 +552,7 @@ export function ProofView() {
                 No transformation path found between the expressions.
               </div>
               <div className="text-sm text-gray-400">
-                Explored {proof.totalStatesExplored} states to depth{" "}
-                {proof.searchDepth}
+                Explored {proof.totalStatesExplored} states to depth {proof.searchDepth}
               </div>
               <div className="text-sm text-gray-400 mt-2">
                 Try increasing the max depth or enabling more rules.

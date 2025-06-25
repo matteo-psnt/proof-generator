@@ -4,11 +4,22 @@
 
 @layer base {
   html {
-    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    font-family:
+      ui-sans-serif,
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      Roboto,
+      'Helvetica Neue',
+      Arial,
+      'Noto Sans',
+      sans-serif;
   }
-  
+
   code {
-    font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+    font-family:
+      ui-monospace, SFMono-Regular, 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace;
   }
 }
 
@@ -16,58 +27,58 @@
   .btn {
     @apply px-4 py-2 rounded-md font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
   }
-  
+
   .btn-primary {
     @apply btn bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500;
   }
-  
+
   .btn-secondary {
     @apply btn bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-500;
   }
-  
+
   .btn-outline {
     @apply btn border border-gray-300 text-gray-700 hover:bg-gray-50 focus:ring-primary-500;
   }
-  
+
   .input {
     @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
   }
-  
+
   .card {
     @apply bg-white rounded-lg shadow-sm border border-gray-200 p-6;
   }
-  
+
   .expression {
     @apply font-mono text-lg bg-gray-50 px-3 py-2 rounded border;
   }
-  
+
   /* Custom slider styling */
   .slider {
     @apply appearance-none bg-transparent cursor-pointer;
   }
-  
+
   .slider::-webkit-slider-track {
     @apply h-2 bg-blue-200 rounded-lg;
   }
-  
+
   .slider::-webkit-slider-thumb {
     @apply appearance-none h-5 w-5 bg-blue-600 rounded-full cursor-pointer border-2 border-white shadow-md;
   }
-  
+
   .slider::-moz-range-track {
     @apply h-2 bg-blue-200 rounded-lg border-none;
   }
-  
+
   .slider::-moz-range-thumb {
     @apply h-5 w-5 bg-blue-600 rounded-full cursor-pointer border-2 border-white shadow-md;
     border: none;
     margin-top: -1px;
   }
-  
+
   .slider:focus {
     @apply outline-none;
   }
-  
+
   .slider:focus::-webkit-slider-thumb {
     @apply ring-2 ring-blue-500 ring-offset-2;
   }

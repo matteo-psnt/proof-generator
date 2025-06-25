@@ -1,6 +1,6 @@
 /**
  * Parser Tests
- * 
+ *
  * Tests for Boolean expression parsing and tokenization.
  */
 
@@ -49,7 +49,24 @@ describe('Expression Parser', () => {
     test('should handle complex expressions', () => {
       const tokens = parseExpression('((a AND b) OR (NOT c)) => (d IFF e)');
       expect(tokens).toEqual([
-        '(', '(', 'a', '&', 'b', ')', '|', '(', '!', 'c', ')', ')', '=>', '(', 'd', '<=>', 'e', ')'
+        '(',
+        '(',
+        'a',
+        '&',
+        'b',
+        ')',
+        '|',
+        '(',
+        '!',
+        'c',
+        ')',
+        ')',
+        '=>',
+        '(',
+        'd',
+        '<=>',
+        'e',
+        ')',
       ]);
     });
   });
@@ -58,13 +75,28 @@ describe('Expression Parser', () => {
     test('should add parentheses for operator precedence', () => {
       // & has higher precedence than |
       expect(addParentheses(['a', '&', 'b', '|', 'c'])).toEqual([
-        '(', '(', 'a', '&', 'b', ')', '|', 'c', ')'
+        '(',
+        '(',
+        'a',
+        '&',
+        'b',
+        ')',
+        '|',
+        'c',
+        ')',
       ]);
     });
 
     test('should handle negation parentheses', () => {
       expect(addParentheses(['!', 'a', '&', 'b'])).toEqual([
-        '(', '(', '!', 'a', ')', '&', 'b', ')'
+        '(',
+        '(',
+        '!',
+        'a',
+        ')',
+        '&',
+        'b',
+        ')',
       ]);
     });
 
@@ -72,14 +104,28 @@ describe('Expression Parser', () => {
       // Precedence: !, &, |, =>, <=>
       const result = addParentheses(['a', '&', 'b', '|', 'c', '=>', 'd', '<=>', 'e']);
       expect(result).toEqual([
-        '(', '(', '(', '(', 'a', '&', 'b', ')', '|', 'c', ')', '=>', 'd', ')', '<=>', 'e', ')'
+        '(',
+        '(',
+        '(',
+        '(',
+        'a',
+        '&',
+        'b',
+        ')',
+        '|',
+        'c',
+        ')',
+        '=>',
+        'd',
+        ')',
+        '<=>',
+        'e',
+        ')',
       ]);
     });
 
     test('should preserve existing parentheses', () => {
-      expect(addParentheses(['(', 'a', '&', 'b', ')'])).toEqual([
-        '(', 'a', '&', 'b', ')'
-      ]);
+      expect(addParentheses(['(', 'a', '&', 'b', ')'])).toEqual(['(', 'a', '&', 'b', ')']);
     });
 
     test('should throw error for unbalanced parentheses', () => {
@@ -92,20 +138,34 @@ describe('Expression Parser', () => {
     });
 
     test('should handle nested negations', () => {
-      expect(addParentheses(['!', '!', 'a'])).toEqual([
-        '(', '!', '(', '!', 'a', ')', ')'
-      ]);
+      expect(addParentheses(['!', '!', 'a'])).toEqual(['(', '!', '(', '!', 'a', ')', ')']);
     });
 
     test('should handle triple negations', () => {
       expect(addParentheses(['!', '!', '!', 'a'])).toEqual([
-        '(', '!', '(', '!', '(', '!', 'a', ')', ')', ')'
+        '(',
+        '!',
+        '(',
+        '!',
+        '(',
+        '!',
+        'a',
+        ')',
+        ')',
+        ')',
       ]);
     });
 
     test('should handle negation of parenthesized expressions', () => {
       expect(addParentheses(['!', '(', 'a', '&', 'b', ')'])).toEqual([
-        '(', '!', '(', 'a', '&', 'b', ')', ')'
+        '(',
+        '!',
+        '(',
+        'a',
+        '&',
+        'b',
+        ')',
+        ')',
       ]);
     });
   });
@@ -115,7 +175,7 @@ describe('Expression Parser', () => {
       // This was the original issue reported by the user
       const tokens = parseExpression('!!a');
       expect(tokens).toEqual(['!', '!', 'a']);
-      
+
       const withParens = addParentheses(tokens);
       expect(withParens).toEqual(['(', '!', '(', '!', 'a', ')', ')']);
     });
@@ -123,7 +183,7 @@ describe('Expression Parser', () => {
     test('should parse complex expressions with double negation', () => {
       const tokens = parseExpression('!!a & b');
       expect(tokens).toEqual(['!', '!', 'a', '&', 'b']);
-      
+
       const withParens = addParentheses(tokens);
       expect(withParens).toEqual(['(', '(', '!', '(', '!', 'a', ')', ')', '&', 'b', ')']);
     });

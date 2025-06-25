@@ -1,6 +1,6 @@
 /**
  * Rule Selector Component
- * 
+ *
  * Interface for selecting which transformation rules to use in proofs.
  */
 
@@ -15,7 +15,12 @@ interface RuleSelectorProps {
   onDeselectAll: () => void;
 }
 
-export function RuleSelector({ selectedRules, onRuleToggle, onSelectAll, onDeselectAll }: RuleSelectorProps) {
+export function RuleSelector({
+  selectedRules,
+  onRuleToggle,
+  onSelectAll,
+  onDeselectAll,
+}: RuleSelectorProps) {
   const allSelected = selectedRules.size === ALL_TRANSFORMATION_RULES.length;
   const noneSelected = selectedRules.size === 0;
 
@@ -23,22 +28,14 @@ export function RuleSelector({ selectedRules, onRuleToggle, onSelectAll, onDesel
     <div className="card">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold text-gray-900">Transformation Rules</h3>
-        
+
         <div className="flex space-x-2">
-          <button
-            onClick={onSelectAll}
-            disabled={allSelected}
-            className="btn-outline text-sm"
-          >
+          <button onClick={onSelectAll} disabled={allSelected} className="btn-outline text-sm">
             <CheckSquare className="h-4 w-4 mr-1" />
             All
           </button>
-          
-          <button
-            onClick={onDeselectAll}
-            disabled={noneSelected}
-            className="btn-outline text-sm"
-          >
+
+          <button onClick={onDeselectAll} disabled={noneSelected} className="btn-outline text-sm">
             <Square className="h-4 w-4 mr-1" />
             None
           </button>
@@ -46,8 +43,8 @@ export function RuleSelector({ selectedRules, onRuleToggle, onSelectAll, onDesel
       </div>
 
       <div className="text-sm text-gray-600 mb-4">
-        Select which logical transformation rules to use when searching for proofs. 
-        More rules may find more solutions but will take longer to search.
+        Select which logical transformation rules to use when searching for proofs. More rules may
+        find more solutions but will take longer to search.
       </div>
 
       <div className="space-y-6">
@@ -56,7 +53,7 @@ export function RuleSelector({ selectedRules, onRuleToggle, onSelectAll, onDesel
             <h4 className="font-medium text-gray-900 mb-3 capitalize">
               {category.replace('_', ' & ')} Rules
             </h4>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {rules.map((rule) => (
                 <label
@@ -69,14 +66,10 @@ export function RuleSelector({ selectedRules, onRuleToggle, onSelectAll, onDesel
                     onChange={() => onRuleToggle(rule.name)}
                     className="mt-1 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
                   />
-                  
+
                   <div className="flex-1 min-w-0">
-                    <div className="font-medium text-gray-900 text-sm">
-                      {rule.name}
-                    </div>
-                    <div className="text-xs text-gray-600 mt-1 font-mono">
-                      {rule.description}
-                    </div>
+                    <div className="font-medium text-gray-900 text-sm">{rule.name}</div>
+                    <div className="text-xs text-gray-600 mt-1 font-mono">{rule.description}</div>
                   </div>
                 </label>
               ))}

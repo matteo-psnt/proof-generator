@@ -1,6 +1,6 @@
 /**
  * Core Boolean Expression Types and Classes
- * 
+ *
  * This module contains the fundamental types for representing Boolean expressions
  * as an Abstract Syntax Tree (AST). Each expression type supports evaluation,
  * string representation, and structural equality checks.
@@ -15,7 +15,7 @@ export abstract class BooleanExpression {
   abstract clone(): BooleanExpression;
   abstract getLength(): number;
   abstract getVariables(): Set<string>;
-  
+
   // Hash function for use in sets and maps
   abstract getHash(): string;
 }
@@ -125,12 +125,12 @@ export abstract class BinaryOperation extends BooleanExpression {
   }
 
   protected formatToString(): string {
-    const leftStr = this.shouldParenthesize(this.left) 
-      ? `(${this.left.toString()})` 
+    const leftStr = this.shouldParenthesize(this.left)
+      ? `(${this.left.toString()})`
       : this.left.toString();
-    
-    const rightStr = this.shouldParenthesize(this.right) 
-      ? `(${this.right.toString()})` 
+
+    const rightStr = this.shouldParenthesize(this.right)
+      ? `(${this.right.toString()})`
       : this.right.toString();
 
     return `${leftStr} ${this.getOperatorSymbol()} ${rightStr}`;
@@ -308,29 +308,27 @@ export class FalseConstant extends BooleanExpression {
 }
 
 // Type guards for instanceof checks
-export const isVariable = (expr: BooleanExpression): expr is Variable => 
-  expr instanceof Variable;
+export const isVariable = (expr: BooleanExpression): expr is Variable => expr instanceof Variable;
 
-export const isNegation = (expr: BooleanExpression): expr is Negation => 
-  expr instanceof Negation;
+export const isNegation = (expr: BooleanExpression): expr is Negation => expr instanceof Negation;
 
-export const isConjunction = (expr: BooleanExpression): expr is Conjunction => 
+export const isConjunction = (expr: BooleanExpression): expr is Conjunction =>
   expr instanceof Conjunction;
 
-export const isDisjunction = (expr: BooleanExpression): expr is Disjunction => 
+export const isDisjunction = (expr: BooleanExpression): expr is Disjunction =>
   expr instanceof Disjunction;
 
-export const isImplication = (expr: BooleanExpression): expr is Implication => 
+export const isImplication = (expr: BooleanExpression): expr is Implication =>
   expr instanceof Implication;
 
-export const isBiconditional = (expr: BooleanExpression): expr is Biconditional => 
+export const isBiconditional = (expr: BooleanExpression): expr is Biconditional =>
   expr instanceof Biconditional;
 
-export const isTrueConstant = (expr: BooleanExpression): expr is TrueConstant => 
+export const isTrueConstant = (expr: BooleanExpression): expr is TrueConstant =>
   expr instanceof TrueConstant;
 
-export const isFalseConstant = (expr: BooleanExpression): expr is FalseConstant => 
+export const isFalseConstant = (expr: BooleanExpression): expr is FalseConstant =>
   expr instanceof FalseConstant;
 
-export const isBinaryOperation = (expr: BooleanExpression): expr is BinaryOperation => 
+export const isBinaryOperation = (expr: BooleanExpression): expr is BinaryOperation =>
   expr instanceof BinaryOperation;

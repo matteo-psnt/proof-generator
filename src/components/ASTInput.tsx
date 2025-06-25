@@ -1,6 +1,6 @@
 /**
  * AST Input Component
- * 
+ *
  * Specialized input component for Abstract Syntax Tree visualization.
  */
 
@@ -9,11 +9,7 @@ import { Eye, RefreshCw } from 'lucide-react';
 import { useAppStore } from '../store/appStore';
 
 export function ASTInput() {
-  const { 
-    currentExpressionString, 
-    expressionError,
-    setCurrentExpression 
-  } = useAppStore();
+  const { currentExpressionString, expressionError, setCurrentExpression } = useAppStore();
 
   const handleQuickExample = (example: string) => {
     setCurrentExpression(example);
@@ -24,7 +20,7 @@ export function ASTInput() {
     const constants = ['true', 'false'];
     const operators = ['&', '|', '=>', '<=>', '!'];
     const complexityLevels = [1, 2, 3]; // 1 = simple, 2 = medium, 3 = complex
-    
+
     const getRandomVariable = () => variables[Math.floor(Math.random() * variables.length)];
     const getRandomConstant = () => constants[Math.floor(Math.random() * constants.length)];
     const getRandomOperand = () => {
@@ -33,14 +29,14 @@ export function ASTInput() {
     };
     const getRandomOperator = () => operators[Math.floor(Math.random() * operators.length)];
     const complexity = complexityLevels[Math.floor(Math.random() * complexityLevels.length)];
-    
+
     const generateSubExpression = (depth: number): string => {
       if (depth === 0) {
         return getRandomOperand();
       }
-      
+
       const operator = getRandomOperator();
-      
+
       if (operator === '!') {
         return `!${generateSubExpression(depth - 1)}`;
       } else {
@@ -49,7 +45,7 @@ export function ASTInput() {
         return `(${left} ${operator} ${right})`;
       }
     };
-    
+
     return generateSubExpression(complexity);
   };
 
@@ -58,12 +54,7 @@ export function ASTInput() {
     setCurrentExpression(randomExpression);
   };
 
-  const quickExamples = [
-    '(p & q) → r',
-    'a | (b & !c)',
-    '(x ↔ y) & z',
-    '!(a & b) | c'
-  ];
+  const quickExamples = ['(p & q) → r', 'a | (b & !c)', '(x ↔ y) & z', '!(a & b) | c'];
 
   return (
     <div className="card">
@@ -75,7 +66,10 @@ export function ASTInput() {
       <div className="space-y-4">
         {/* Main Input */}
         <div>
-          <label htmlFor="ast-expression-input" className="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            htmlFor="ast-expression-input"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
             Expression
           </label>
           <div className="relative">
@@ -86,9 +80,7 @@ export function ASTInput() {
               onChange={(e) => setCurrentExpression(e.target.value)}
               placeholder="Enter expression to visualize (e.g., (p & q) → r)"
               className={`input font-mono ${
-                expressionError 
-                  ? 'border-red-300 focus:ring-red-500' 
-                  : ''
+                expressionError ? 'border-red-300 focus:ring-red-500' : ''
               }`}
             />
             <button
@@ -99,17 +91,13 @@ export function ASTInput() {
               <RefreshCw className="h-4 w-4" />
             </button>
           </div>
-          
-          {expressionError && (
-            <p className="mt-2 text-sm text-red-600">{expressionError}</p>
-          )}
+
+          {expressionError && <p className="mt-2 text-sm text-red-600">{expressionError}</p>}
         </div>
 
         {/* Quick Examples */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Quick examples
-          </label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Quick examples</label>
           <div className="flex flex-wrap gap-2">
             {quickExamples.map((example, index) => (
               <button
@@ -122,7 +110,6 @@ export function ASTInput() {
             ))}
           </div>
         </div>
-
       </div>
     </div>
   );

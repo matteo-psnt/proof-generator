@@ -1,6 +1,6 @@
 /**
  * Transformational Proof Rules
- * 
+ *
  * This module contains all the logical transformation rules that can be applied
  * to Boolean expressions. Each rule defines when it can be applied and how to
  * transform the expression.
@@ -22,7 +22,7 @@ import {
   isBiconditional,
   isTrueConstant,
   isFalseConstant,
-  isBinaryOperation
+  isBinaryOperation,
 } from './expressions';
 
 export interface TransformationRule {
@@ -123,17 +123,17 @@ export class ExcludedMiddle extends Rule {
 
   canApply(expression: BooleanExpression): boolean {
     if (!isDisjunction(expression)) return false;
-    
+
     // Check for P ∨ ¬P
     if (isNegation(expression.right)) {
       return expression.left.equals(expression.right.expression);
     }
-    
+
     // Check for ¬P ∨ P
     if (isNegation(expression.left)) {
       return expression.right.equals(expression.left.expression);
     }
-    
+
     return false;
   }
 
@@ -153,17 +153,17 @@ export class Contradiction extends Rule {
 
   canApply(expression: BooleanExpression): boolean {
     if (!isConjunction(expression)) return false;
-    
+
     // Check for P ∧ ¬P
     if (isNegation(expression.right)) {
       return expression.left.equals(expression.right.expression);
     }
-    
+
     // Check for ¬P ∧ P
     if (isNegation(expression.left)) {
       return expression.right.equals(expression.left.expression);
     }
-    
+
     return false;
   }
 
@@ -187,13 +187,10 @@ export class DeMorganAND extends Rule {
 
   apply(expression: BooleanExpression): BooleanExpression {
     if (!isNegation(expression) || !isConjunction(expression.expression)) {
-      throw new Error('Cannot apply De Morgan\'s law for AND');
+      throw new Error("Cannot apply De Morgan's law for AND");
     }
     const inner = expression.expression;
-    return new Disjunction(
-      new Negation(inner.left),
-      new Negation(inner.right)
-    );
+    return new Disjunction(new Negation(inner.left), new Negation(inner.right));
   }
 }
 
@@ -208,13 +205,10 @@ export class DeMorganOR extends Rule {
 
   apply(expression: BooleanExpression): BooleanExpression {
     if (!isNegation(expression) || !isDisjunction(expression.expression)) {
-      throw new Error('Cannot apply De Morgan\'s law for OR');
+      throw new Error("Cannot apply De Morgan's law for OR");
     }
     const inner = expression.expression;
-    return new Conjunction(
-      new Negation(inner.left),
-      new Negation(inner.right)
-    );
+    return new Conjunction(new Negation(inner.left), new Negation(inner.right));
   }
 }
 
@@ -225,18 +219,18 @@ export class DeMorganANDReverse extends Rule {
   }
 
   canApply(expression: BooleanExpression): boolean {
-    return isDisjunction(expression) && 
-           isNegation(expression.left) && 
-           isNegation(expression.right);
+    return isDisjunction(expression) && isNegation(expression.left) && isNegation(expression.right);
   }
 
   apply(expression: BooleanExpression): BooleanExpression {
-    if (!isDisjunction(expression) || !isNegation(expression.left) || !isNegation(expression.right)) {
-      throw new Error('Cannot apply reverse De Morgan\'s law for AND');
+    if (
+      !isDisjunction(expression) ||
+      !isNegation(expression.left) ||
+      !isNegation(expression.right)
+    ) {
+      throw new Error("Cannot apply reverse De Morgan's law for AND");
     }
-    return new Negation(
-      new Conjunction(expression.left.expression, expression.right.expression)
-    );
+    return new Negation(new Conjunction(expression.left.expression, expression.right.expression));
   }
 }
 
@@ -246,18 +240,18 @@ export class DeMorganORReverse extends Rule {
   }
 
   canApply(expression: BooleanExpression): boolean {
-    return isConjunction(expression) && 
-           isNegation(expression.left) && 
-           isNegation(expression.right);
+    return isConjunction(expression) && isNegation(expression.left) && isNegation(expression.right);
   }
 
   apply(expression: BooleanExpression): BooleanExpression {
-    if (!isConjunction(expression) || !isNegation(expression.left) || !isNegation(expression.right)) {
-      throw new Error('Cannot apply reverse De Morgan\'s law for OR');
+    if (
+      !isConjunction(expression) ||
+      !isNegation(expression.left) ||
+      !isNegation(expression.right)
+    ) {
+      throw new Error("Cannot apply reverse De Morgan's law for OR");
     }
-    return new Negation(
-      new Disjunction(expression.left.expression, expression.right.expression)
-    );
+    return new Negation(new Disjunction(expression.left.expression, expression.right.expression));
   }
 }
 
@@ -275,10 +269,7 @@ export class ImplicationElimination extends Rule {
     if (!isImplication(expression)) {
       throw new Error('Cannot apply implication elimination to non-implication');
     }
-    return new Disjunction(
-      new Negation(expression.left),
-      expression.right
-    );
+    return new Disjunction(new Negation(expression.left), expression.right);
   }
 }
 
@@ -315,10 +306,7 @@ export class DistributivityAND extends Rule {
     }
     const P = expression.left;
     const QorR = expression.right;
-    return new Disjunction(
-      new Conjunction(P, QorR.left),
-      new Conjunction(P, QorR.right)
-    );
+    return new Disjunction(new Conjunction(P, QorR.left), new Conjunction(P, QorR.right));
   }
 }
 
@@ -337,10 +325,7 @@ export class DistributivityOR extends Rule {
     }
     const P = expression.left;
     const QandR = expression.right;
-    return new Conjunction(
-      new Disjunction(P, QandR.left),
-      new Disjunction(P, QandR.right)
-    );
+    return new Conjunction(new Disjunction(P, QandR.left), new Disjunction(P, QandR.right));
   }
 }
 
@@ -391,8 +376,7 @@ export class DistributivityANDReverse extends Rule {
     if (!isDisjunction(expression)) return false;
     const left = expression.left;
     const right = expression.right;
-    return isConjunction(left) && isConjunction(right) && 
-           left.left.equals(right.left);
+    return isConjunction(left) && isConjunction(right) && left.left.equals(right.left);
   }
 
   apply(expression: BooleanExpression): BooleanExpression {
@@ -414,8 +398,7 @@ export class DistributivityORReverse extends Rule {
     if (!isConjunction(expression)) return false;
     const left = expression.left;
     const right = expression.right;
-    return isDisjunction(left) && isDisjunction(right) && 
-           left.left.equals(right.left);
+    return isDisjunction(left) && isDisjunction(right) && left.left.equals(right.left);
   }
 
   apply(expression: BooleanExpression): BooleanExpression {
@@ -444,10 +427,7 @@ export class Contrapositive extends Rule {
     if (!isImplication(expression)) {
       throw new Error('Cannot apply contrapositive to non-implication');
     }
-    return new Implication(
-      new Negation(expression.right),
-      new Negation(expression.left)
-    );
+    return new Implication(new Negation(expression.right), new Negation(expression.left));
   }
 }
 
@@ -458,8 +438,10 @@ export class Idempotence extends Rule {
   }
 
   canApply(expression: BooleanExpression): boolean {
-    return (isConjunction(expression) || isDisjunction(expression)) &&
-           expression.left.equals(expression.right);
+    return (
+      (isConjunction(expression) || isDisjunction(expression)) &&
+      expression.left.equals(expression.right)
+    );
   }
 
   apply(expression: BooleanExpression): BooleanExpression {
@@ -478,8 +460,10 @@ export class IdempotenceReverseOR extends Rule {
 
   canApply(expression: BooleanExpression): boolean {
     // Apply to any expression that's not already an idempotent OR/AND
-    return !(isDisjunction(expression) && expression.left.equals(expression.right)) &&
-           !(isConjunction(expression) && expression.left.equals(expression.right));
+    return (
+      !(isDisjunction(expression) && expression.left.equals(expression.right)) &&
+      !(isConjunction(expression) && expression.left.equals(expression.right))
+    );
   }
 
   apply(expression: BooleanExpression): BooleanExpression {
@@ -494,8 +478,10 @@ export class IdempotenceReverseAND extends Rule {
 
   canApply(expression: BooleanExpression): boolean {
     // Apply to any expression that's not already an idempotent OR/AND
-    return !(isDisjunction(expression) && expression.left.equals(expression.right)) &&
-           !(isConjunction(expression) && expression.left.equals(expression.right));
+    return (
+      !(isDisjunction(expression) && expression.left.equals(expression.right)) &&
+      !(isConjunction(expression) && expression.left.equals(expression.right))
+    );
   }
 
   apply(expression: BooleanExpression): BooleanExpression {
@@ -534,8 +520,12 @@ export class EquivalenceReverse extends Rule {
     if (!isConjunction(expression)) return false;
     const left = expression.left;
     const right = expression.right;
-    return isImplication(left) && isImplication(right) &&
-           left.left.equals(right.right) && left.right.equals(right.left);
+    return (
+      isImplication(left) &&
+      isImplication(right) &&
+      left.left.equals(right.right) &&
+      left.right.equals(right.left)
+    );
   }
 
   apply(expression: BooleanExpression): BooleanExpression {
@@ -609,8 +599,16 @@ export class Simplification1AndReverse extends Rule {
   }
 
   canApply(expression: BooleanExpression): boolean {
-    return !(isConjunction(expression) && (isTrueConstant(expression.left) || isTrueConstant(expression.right))) &&
-           !(isDisjunction(expression) && (isFalseConstant(expression.left) || isFalseConstant(expression.right)));
+    return (
+      !(
+        isConjunction(expression) &&
+        (isTrueConstant(expression.left) || isTrueConstant(expression.right))
+      ) &&
+      !(
+        isDisjunction(expression) &&
+        (isFalseConstant(expression.left) || isFalseConstant(expression.right))
+      )
+    );
   }
 
   apply(expression: BooleanExpression): BooleanExpression {
@@ -624,8 +622,16 @@ export class Simplification1OrReverse extends Rule {
   }
 
   canApply(expression: BooleanExpression): boolean {
-    return !(isConjunction(expression) && (isTrueConstant(expression.left) || isTrueConstant(expression.right))) &&
-           !(isDisjunction(expression) && (isFalseConstant(expression.left) || isFalseConstant(expression.right)));
+    return (
+      !(
+        isConjunction(expression) &&
+        (isTrueConstant(expression.left) || isTrueConstant(expression.right))
+      ) &&
+      !(
+        isDisjunction(expression) &&
+        (isFalseConstant(expression.left) || isFalseConstant(expression.right))
+      )
+    );
   }
 
   apply(expression: BooleanExpression): BooleanExpression {
@@ -639,8 +645,10 @@ export class Simplification1True extends Rule {
   }
 
   canApply(expression: BooleanExpression): boolean {
-    return isDisjunction(expression) && 
-           (isTrueConstant(expression.left) || isTrueConstant(expression.right));
+    return (
+      isDisjunction(expression) &&
+      (isTrueConstant(expression.left) || isTrueConstant(expression.right))
+    );
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -655,8 +663,10 @@ export class Simplification1False extends Rule {
   }
 
   canApply(expression: BooleanExpression): boolean {
-    return isConjunction(expression) && 
-           (isFalseConstant(expression.left) || isFalseConstant(expression.right));
+    return (
+      isConjunction(expression) &&
+      (isFalseConstant(expression.left) || isFalseConstant(expression.right))
+    );
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -672,20 +682,20 @@ export class Simplification2Or extends Rule {
 
   canApply(expression: BooleanExpression): boolean {
     if (!isDisjunction(expression)) return false;
-    
+
     const left = expression.left;
     const right = expression.right;
-    
+
     // Check P ∨ (P ∧ Q) pattern
     if (isConjunction(right)) {
       return left.equals(right.left) || left.equals(right.right);
     }
-    
+
     // Check (P ∧ Q) ∨ P pattern
     if (isConjunction(left)) {
       return right.equals(left.left) || right.equals(left.right);
     }
-    
+
     return false;
   }
 
@@ -693,10 +703,10 @@ export class Simplification2Or extends Rule {
     if (!isDisjunction(expression)) {
       throw new Error('Cannot apply OR simplification 2 to non-disjunction');
     }
-    
+
     const left = expression.left;
     const right = expression.right;
-    
+
     if (isConjunction(right)) {
       return left; // P ∨ (P ∧ Q) = P
     } else {
@@ -712,20 +722,20 @@ export class Simplification2And extends Rule {
 
   canApply(expression: BooleanExpression): boolean {
     if (!isConjunction(expression)) return false;
-    
+
     const left = expression.left;
     const right = expression.right;
-    
+
     // Check P ∧ (P ∨ Q) pattern
     if (isDisjunction(right)) {
       return left.equals(right.left) || left.equals(right.right);
     }
-    
+
     // Check (P ∨ Q) ∧ P pattern
     if (isDisjunction(left)) {
       return right.equals(left.left) || right.equals(left.right);
     }
-    
+
     return false;
   }
 
@@ -733,10 +743,10 @@ export class Simplification2And extends Rule {
     if (!isConjunction(expression)) {
       throw new Error('Cannot apply AND simplification 2 to non-conjunction');
     }
-    
+
     const left = expression.left;
     const right = expression.right;
-    
+
     if (isDisjunction(right)) {
       return left; // P ∧ (P ∨ Q) = P
     } else {
@@ -747,62 +757,65 @@ export class Simplification2And extends Rule {
 
 // Export all transformation rules
 export const ALL_TRANSFORMATION_RULES: TransformationRule[] = [
-    // Commutativity and Associativity
-    new CommutativityAND(),
-    new CommutativityOR(),
-    new CommutativityIFF(),
-    new CommutativityANDAND(),
-    new CommutativityOROR(),
+  // Commutativity and Associativity
+  new CommutativityAND(),
+  new CommutativityOR(),
+  new CommutativityIFF(),
+  new CommutativityANDAND(),
+  new CommutativityOROR(),
 
-    // Double Negation
-    new DoubleNegation(),
+  // Double Negation
+  new DoubleNegation(),
 
-    // Excluded Middle and Contradiction
-    new ExcludedMiddle(),
-    new Contradiction(),
+  // Excluded Middle and Contradiction
+  new ExcludedMiddle(),
+  new Contradiction(),
 
-    // De Morgan's Laws
-    new DeMorganAND(),
-    new DeMorganOR(),
-    new DeMorganANDReverse(),
-    new DeMorganORReverse(),
+  // De Morgan's Laws
+  new DeMorganAND(),
+  new DeMorganOR(),
+  new DeMorganANDReverse(),
+  new DeMorganORReverse(),
 
-    // Implication
-    new ImplicationElimination(),
-    new ImplicationEliminationReverse(),
-    new Contrapositive(),
+  // Implication
+  new ImplicationElimination(),
+  new ImplicationEliminationReverse(),
+  new Contrapositive(),
 
-    // Distributivity
-    new DistributivityAND(),
-    new DistributivityOR(),
-    new DistributivityANDReverse(),
-    new DistributivityORReverse(),
+  // Distributivity
+  new DistributivityAND(),
+  new DistributivityOR(),
+  new DistributivityANDReverse(),
+  new DistributivityORReverse(),
 
-    // Idempotence
-    new Idempotence(),
-    new IdempotenceReverseOR(),
-    new IdempotenceReverseAND(),
+  // Idempotence
+  new Idempotence(),
+  new IdempotenceReverseOR(),
+  new IdempotenceReverseAND(),
 
-    // Equivalence
-    new Equivalence(),
-    new EquivalenceReverse(),
+  // Equivalence
+  new Equivalence(),
+  new EquivalenceReverse(),
 
-    // Simplification
-    new SimplificationWithTrue(),
-    new SimplificationWithFalse(),
-    new Simplification1AndReverse(),
-    new Simplification1OrReverse(),
-    new Simplification1True(),
-    new Simplification1False(),
-    new Simplification2Or(),
-    new Simplification2And()
+  // Simplification
+  new SimplificationWithTrue(),
+  new SimplificationWithFalse(),
+  new Simplification1AndReverse(),
+  new Simplification1OrReverse(),
+  new Simplification1True(),
+  new Simplification1False(),
+  new Simplification2Or(),
+  new Simplification2And(),
 ];
 
 // Group rules by category
-export const RULES_BY_CATEGORY = ALL_TRANSFORMATION_RULES.reduce((acc, rule) => {
-  if (!acc[rule.category]) {
-    acc[rule.category] = [];
-  }
-  acc[rule.category].push(rule);
-  return acc;
-}, {} as Record<string, TransformationRule[]>);
+export const RULES_BY_CATEGORY = ALL_TRANSFORMATION_RULES.reduce(
+  (acc, rule) => {
+    if (!acc[rule.category]) {
+      acc[rule.category] = [];
+    }
+    acc[rule.category].push(rule);
+    return acc;
+  },
+  {} as Record<string, TransformationRule[]>
+);

@@ -1,6 +1,6 @@
 /**
  * Boolean Expression Tests
- * 
+ *
  * Comprehensive tests for the core Boolean expression classes.
  */
 
@@ -13,7 +13,7 @@ import {
   Biconditional,
   TrueConstant,
   FalseConstant,
-  Assignment
+  Assignment,
 } from '../../logic/expressions';
 
 describe('Boolean Expressions', () => {
@@ -21,7 +21,7 @@ describe('Boolean Expressions', () => {
     test('should evaluate correctly', () => {
       const var1 = new Variable('a');
       const assignment: Assignment = { a: true, b: false };
-      
+
       expect(var1.evaluate(assignment)).toBe(true);
       expect(var1.toString()).toBe('a');
       expect(var1.getLength()).toBe(1);
@@ -31,7 +31,7 @@ describe('Boolean Expressions', () => {
     test('should throw error for missing variable', () => {
       const var1 = new Variable('c');
       const assignment: Assignment = { a: true, b: false };
-      
+
       expect(() => var1.evaluate(assignment)).toThrow("Variable 'c' not found in assignment");
     });
 
@@ -39,7 +39,7 @@ describe('Boolean Expressions', () => {
       const var1 = new Variable('a');
       const var2 = new Variable('a');
       const var3 = new Variable('b');
-      
+
       expect(var1.equals(var2)).toBe(true);
       expect(var1.equals(var3)).toBe(false);
     });
@@ -50,7 +50,7 @@ describe('Boolean Expressions', () => {
       const var1 = new Variable('a');
       const neg = new Negation(var1);
       const assignment: Assignment = { a: true };
-      
+
       expect(neg.evaluate(assignment)).toBe(false);
       expect(neg.toString()).toBe('!a');
       expect(neg.getLength()).toBe(2);
@@ -60,7 +60,7 @@ describe('Boolean Expressions', () => {
       const var1 = new Variable('a');
       const doubleNeg = new Negation(new Negation(var1));
       const assignment: Assignment = { a: true };
-      
+
       expect(doubleNeg.evaluate(assignment)).toBe(true);
       expect(doubleNeg.toString()).toBe('!!a');
     });
@@ -71,12 +71,12 @@ describe('Boolean Expressions', () => {
       const var1 = new Variable('a');
       const var2 = new Variable('b');
       const and = new Conjunction(var1, var2);
-      
+
       expect(and.evaluate({ a: true, b: true })).toBe(true);
       expect(and.evaluate({ a: true, b: false })).toBe(false);
       expect(and.evaluate({ a: false, b: true })).toBe(false);
       expect(and.evaluate({ a: false, b: false })).toBe(false);
-      
+
       expect(and.toString()).toBe('a & b');
       expect(and.getLength()).toBe(3);
       expect(and.getVariables()).toEqual(new Set(['a', 'b']));
@@ -88,12 +88,12 @@ describe('Boolean Expressions', () => {
       const var1 = new Variable('a');
       const var2 = new Variable('b');
       const or = new Disjunction(var1, var2);
-      
+
       expect(or.evaluate({ a: true, b: true })).toBe(true);
       expect(or.evaluate({ a: true, b: false })).toBe(true);
       expect(or.evaluate({ a: false, b: true })).toBe(true);
       expect(or.evaluate({ a: false, b: false })).toBe(false);
-      
+
       expect(or.toString()).toBe('a | b');
     });
   });
@@ -103,12 +103,12 @@ describe('Boolean Expressions', () => {
       const var1 = new Variable('a');
       const var2 = new Variable('b');
       const imp = new Implication(var1, var2);
-      
+
       expect(imp.evaluate({ a: true, b: true })).toBe(true);
       expect(imp.evaluate({ a: true, b: false })).toBe(false);
       expect(imp.evaluate({ a: false, b: true })).toBe(true);
       expect(imp.evaluate({ a: false, b: false })).toBe(true);
-      
+
       expect(imp.toString()).toBe('a => b');
     });
   });
@@ -118,12 +118,12 @@ describe('Boolean Expressions', () => {
       const var1 = new Variable('a');
       const var2 = new Variable('b');
       const iff = new Biconditional(var1, var2);
-      
+
       expect(iff.evaluate({ a: true, b: true })).toBe(true);
       expect(iff.evaluate({ a: true, b: false })).toBe(false);
       expect(iff.evaluate({ a: false, b: true })).toBe(false);
       expect(iff.evaluate({ a: false, b: false })).toBe(true);
-      
+
       expect(iff.toString()).toBe('a <=> b');
     });
   });
@@ -131,7 +131,7 @@ describe('Boolean Expressions', () => {
   describe('Constants', () => {
     test('TrueConstant should work correctly', () => {
       const trueConst = new TrueConstant();
-      
+
       expect(trueConst.evaluate({})).toBe(true);
       expect(trueConst.toString()).toBe('true');
       expect(trueConst.getLength()).toBe(1);
@@ -140,7 +140,7 @@ describe('Boolean Expressions', () => {
 
     test('FalseConstant should work correctly', () => {
       const falseConst = new FalseConstant();
-      
+
       expect(falseConst.evaluate({})).toBe(false);
       expect(falseConst.toString()).toBe('false');
       expect(falseConst.getLength()).toBe(1);
@@ -154,15 +154,15 @@ describe('Boolean Expressions', () => {
       const var1 = new Variable('a');
       const var2 = new Variable('b');
       const var3 = new Variable('c');
-      
+
       const and = new Conjunction(var1, var2);
       const not = new Negation(var3);
       const or = new Disjunction(and, not);
-      
+
       expect(or.evaluate({ a: true, b: true, c: false })).toBe(true);
       expect(or.evaluate({ a: false, b: false, c: true })).toBe(false);
       expect(or.evaluate({ a: false, b: false, c: false })).toBe(true);
-      
+
       expect(or.getVariables()).toEqual(new Set(['a', 'b', 'c']));
       expect(or.getLength()).toBe(6); // a, b, &, c, !, |
     });

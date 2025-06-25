@@ -7,14 +7,9 @@ module.exports = {
   },
   testMatch: [
     '<rootDir>/src/**/__tests__/**/*.{ts,tsx}',
-    '<rootDir>/src/**/*.{test,spec}.{ts,tsx}'
+    '<rootDir>/src/**/*.{test,spec}.{ts,tsx}',
   ],
-  collectCoverageFrom: [
-    'src/**/*.{ts,tsx}',
-    '!src/**/*.d.ts',
-    '!src/main.tsx',
-    '!src/test/**/*'
-  ],
+  collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/**/*.d.ts', '!src/main.tsx', '!src/test/**/*'],
   transform: {
     '^.+\\.(ts|tsx)$': 'ts-jest',
   },

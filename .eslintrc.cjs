@@ -10,11 +10,22 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: ['react-refresh', '@typescript-eslint'],
   rules: {
-    'react-refresh/only-export-components': [
-      'warn',
-      { allowConstantExport: true },
+    // Enforce single quotes for JS/TS string literals
+    quotes: [
+      'error',
+      'single',
+      {
+        avoidEscape: true,
+        allowTemplateLiterals: true,
+      },
     ],
+
+    // Enforce double quotes for JSX attributes
+    'jsx-quotes': ['error', 'prefer-double'],
+
+    // Existing project rules
+    'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     '@typescript-eslint/no-unused-vars': ['warn'],
     '@typescript-eslint/no-explicit-any': ['warn'],
   },
-}
+};

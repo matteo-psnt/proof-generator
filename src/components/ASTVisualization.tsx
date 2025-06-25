@@ -10,13 +10,13 @@ import ReactFlow, {
   ReactFlowInstance,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
-import { 
-  BooleanExpression, 
-  Variable, 
-  Negation, 
+import {
+  BooleanExpression,
+  Variable,
+  Negation,
   BinaryOperation,
   TrueConstant,
-  FalseConstant
+  FalseConstant,
 } from '../logic/expressions';
 
 interface ASTVisualizationProps {
@@ -100,7 +100,7 @@ const operatorSymbols: Record<string, string> = {
   'OR': '∨',
   'NOT': '¬',
   'IMP': '→',
-  'IFF': '↔'
+  'IFF': '↔',
 };
 
 function convertExpressionToNodes(
@@ -113,7 +113,7 @@ function convertExpressionToNodes(
   const nodes: ASTNode[] = [];
   const edges: ASTEdge[] = [];
   let currentWidth = 0;
-  
+
   // Ensure proper vertical spacing for tree levels
   const VERTICAL_SPACING = 120;
   const HORIZONTAL_SPACING = 150;
@@ -173,7 +173,10 @@ function convertExpressionToNodes(
     );
 
     // If the operand is a Variable or constant, adjust its position
-    if (operandResult.nodes[0].data.expressionType === 'variable' || operandResult.nodes[0].data.expressionType === 'constant') {
+    if (
+      operandResult.nodes[0].data.expressionType === 'variable' ||
+      operandResult.nodes[0].data.expressionType === 'constant'
+    ) {
       operandResult.nodes[0].position = { x: x - 50, y: y + VERTICAL_SPACING };
     }
 
@@ -254,20 +257,20 @@ function convertExpressionToNodes(
 
 export default function ASTVisualization({ expression, className = '' }: ASTVisualizationProps) {
   const reactFlowInstance = useRef<ReactFlowInstance | null>(null);
-  
+
   const { nodes: initialNodes, edges: initialEdges } = useMemo(() => {
     if (!expression) {
       return { nodes: [], edges: [] };
     }
 
     const result = convertExpressionToNodes(expression, 'root', 0, 0);
-    
+
     // Center the tree horizontally
-    const minX = Math.min(...result.nodes.map(n => n.position.x));
-    const maxX = Math.max(...result.nodes.map(n => n.position.x));
+    const minX = Math.min(...result.nodes.map((n) => n.position.x));
+    const maxX = Math.max(...result.nodes.map((n) => n.position.x));
     const centerOffset = -(minX + maxX) / 2;
 
-    const centeredNodes = result.nodes.map(node => ({
+    const centeredNodes = result.nodes.map((node) => ({
       ...node,
       position: {
         ...node.position,
@@ -310,7 +313,7 @@ export default function ASTVisualization({ expression, className = '' }: ASTVisu
 
   if (!expression) {
     return (
-      <div 
+      <div
         className={`flex items-center justify-center h-full bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg ${className}`}
       >
         <div className="text-center text-gray-500">
@@ -348,12 +351,8 @@ export default function ASTVisualization({ expression, className = '' }: ASTVisu
           minZoom={0.1}
           maxZoom={2}
         >
-          <Background 
-            gap={20} 
-            size={1}
-            color="#e5e7eb"
-          />
-          <Controls 
+          <Background gap={20} size={1} color="#e5e7eb" />
+          <Controls
             position="top-left"
             showZoom={true}
             showFitView={true}

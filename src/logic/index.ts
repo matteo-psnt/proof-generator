@@ -1,6 +1,6 @@
 /**
  * Main Logic Module
- * 
+ *
  * This module provides a high-level interface for working with Boolean expressions.
  * It integrates parsing, AST construction, and evaluation.
  */
@@ -16,17 +16,17 @@ export function parseToExpression(expressionString: string): BooleanExpression {
   try {
     // Step 1: Tokenize the expression
     const tokens = parseExpression(expressionString);
-    
+
     if (tokens.length === 0) {
       throw new ExpressionParseError('Expression cannot be empty');
     }
 
     // Step 2: Add parentheses for proper precedence
     const parenthesizedTokens = addParentheses(tokens);
-    
+
     // Step 3: Construct the AST
     const ast = constructAST(parenthesizedTokens);
-    
+
     return ast;
   } catch (error) {
     if (error instanceof ExpressionParseError) {
@@ -44,9 +44,9 @@ export function validateExpression(expressionString: string): { valid: boolean; 
     parseToExpression(expressionString);
     return { valid: true };
   } catch (error) {
-    return { 
-      valid: false, 
-      error: error instanceof Error ? error.message : 'Unknown parsing error'
+    return {
+      valid: false,
+      error: error instanceof Error ? error.message : 'Unknown parsing error',
     };
   }
 }

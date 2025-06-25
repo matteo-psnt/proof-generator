@@ -1,6 +1,6 @@
 /**
  * Main Content Component
- * 
+ *
  * Container for the main application content that switches based on active tab.
  */
 
@@ -19,11 +19,10 @@ interface MainContentProps {
 
 export function MainContent({ activeTab, className }: MainContentProps) {
   const { currentExpression } = useAppStore();
-  
+
   return (
     <main className={className}>
       <div className="p-6">
-
         {activeTab === 'proof' && (
           <div className="space-y-6">
             <div>
@@ -44,7 +43,7 @@ export function MainContent({ activeTab, className }: MainContentProps) {
                 Enter Boolean expressions to analyze, transform, and explore their properties.
               </p>
             </div>
-            <ExpressionInput 
+            <ExpressionInput
               title="Enter Boolean Expression to Explore"
               placeholder="Enter a Boolean expression to analyze and transform (e.g., (a & b) | !c)"
             />
@@ -65,7 +64,7 @@ export function MainContent({ activeTab, className }: MainContentProps) {
             </div>
           </div>
         )}
-        
+
         {activeTab === 'truth-table' && (
           <div className="space-y-6">
             <div>

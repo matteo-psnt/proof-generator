@@ -1,21 +1,21 @@
 /**
  * Transformational Proof System
- * 
+ *
  * This module implements algorithms for finding transformation paths between
  * Boolean expressions using logical rules. It uses breadth-first search to
  * find the shortest proof sequence.
  */
 
-import { 
-  BooleanExpression, 
-  Negation, 
+import {
+  BooleanExpression,
+  Negation,
   BinaryOperation,
   Conjunction,
   Disjunction,
   Implication,
   Biconditional,
   isNegation,
-  isBinaryOperation
+  isBinaryOperation,
 } from './expressions';
 import { TransformationRule, ALL_TRANSFORMATION_RULES } from './rules';
 
@@ -67,7 +67,7 @@ export function findTransformationProof(
     maxStates = 10000,
     maxExpressionLength = 15,
     rules = ALL_TRANSFORMATION_RULES,
-    onProgress
+    onProgress,
   } = options;
 
   // Check if expressions are already equal
@@ -78,16 +78,18 @@ export function findTransformationProof(
       steps: [{ expression: startExpression, rule: null, stepNumber: 1 }],
       found: true,
       searchDepth: 0,
-      totalStatesExplored: 1
+      totalStatesExplored: 1,
     };
   }
 
-  const queue: ProofNode[] = [{
-    expression: startExpression,
-    parent: null,
-    rule: null,
-    depth: 0
-  }];
+  const queue: ProofNode[] = [
+    {
+      expression: startExpression,
+      parent: null,
+      rule: null,
+      depth: 0,
+    },
+  ];
 
   const visited = new Set<string>();
   visited.add(startExpression.getHash());
@@ -137,7 +139,7 @@ export function findTransformationProof(
         parent: current,
         rule,
         appliedToSubexpression,
-        depth: current.depth + 1
+        depth: current.depth + 1,
       };
 
       // Check if we found the target
@@ -149,7 +151,7 @@ export function findTransformationProof(
           steps,
           found: true,
           searchDepth: newNode.depth,
-          totalStatesExplored: statesExplored
+          totalStatesExplored: statesExplored,
         };
       }
 
@@ -164,7 +166,7 @@ export function findTransformationProof(
     steps: [],
     found: false,
     searchDepth: maxDepthReached,
-    totalStatesExplored: statesExplored
+    totalStatesExplored: statesExplored,
   };
 }
 
@@ -195,7 +197,7 @@ function getAllPossibleTransformations(
           transformations.push({
             newExpression,
             rule,
-            appliedToSubexpression: expression
+            appliedToSubexpression: expression,
           });
         }
       } catch (error) {
@@ -206,11 +208,7 @@ function getAllPossibleTransformations(
   }
 
   // Apply rules to sub-expressions recursively
-  const subTransformations = getSubexpressionTransformations(
-    expression,
-    rules,
-    maxLength
-  );
+  const subTransformations = getSubexpressionTransformations(expression, rules, maxLength);
   transformations.push(...subTransformations);
 
   return transformations;
@@ -248,7 +246,7 @@ function getSubexpressionTransformations(
         transformations.push({
           newExpression,
           rule,
-          appliedToSubexpression
+          appliedToSubexpression,
         });
       }
     }
@@ -269,7 +267,7 @@ function getSubexpressionTransformations(
         transformations.push({
           newExpression,
           rule,
-          appliedToSubexpression
+          appliedToSubexpression,
         });
       }
     }
@@ -287,7 +285,7 @@ function getSubexpressionTransformations(
         transformations.push({
           newExpression,
           rule,
-          appliedToSubexpression
+          appliedToSubexpression,
         });
       }
     }
@@ -302,7 +300,7 @@ function getSubexpressionTransformations(
 function reconstructProof(finalNode: ProofNode): ProofStep[] {
   const steps: ProofStep[] = [];
   const nodes: ProofNode[] = [];
-  
+
   // Collect all nodes from final to start
   let current: ProofNode | null = finalNode;
   while (current) {
@@ -317,7 +315,7 @@ function reconstructProof(finalNode: ProofNode): ProofStep[] {
       expression: node.expression,
       rule: node.rule,
       appliedToSubexpression: node.appliedToSubexpression,
-      stepNumber: i + 1
+      stepNumber: i + 1,
     });
   }
 
@@ -329,8 +327,10 @@ function reconstructProof(finalNode: ProofNode): ProofStep[] {
  */
 export function formatTransformationProof(proof: TransformationProof): string {
   if (!proof.found) {
-    return `No transformation found from ${proof.startExpression.toString()} to ${proof.targetExpression.toString()}\n` +
-           `Search explored ${proof.totalStatesExplored} states to depth ${proof.searchDepth}`;
+    return (
+      `No transformation found from ${proof.startExpression.toString()} to ${proof.targetExpression.toString()}\n` +
+      `Search explored ${proof.totalStatesExplored} states to depth ${proof.searchDepth}`
+    );
   }
 
   // Header with biconditional format
@@ -351,7 +351,7 @@ export function formatTransformationProof(proof: TransformationProof): string {
   for (let i = 0; i < proof.steps.length; i++) {
     const step = proof.steps[i];
     const stepPrefix = `${step.stepNumber}) ${step.expression.toString()}`;
-    
+
     if (i === 0) {
       // First step is just the starting expression
       result += `${stepPrefix}\n`;
@@ -377,7 +377,7 @@ export function isTransformationPossible(
   const proof = findTransformationProof(startExpression, targetExpression, {
     ...options,
     maxDepth: Math.min(options.maxDepth || 10, 10), // Limit depth for quick check
-    maxStates: Math.min(options.maxStates || 1000, 1000) // Limit states for quick check
+    maxStates: Math.min(options.maxStates || 1000, 1000), // Limit states for quick check
   });
 
   return proof.found;

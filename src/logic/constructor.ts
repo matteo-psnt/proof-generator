@@ -1,6 +1,6 @@
 /**
  * AST Constructor
- * 
+ *
  * This module builds Abstract Syntax Trees from tokenized Boolean expressions.
  * It handles operator precedence and parentheses to create the correct tree structure.
  */
@@ -14,7 +14,7 @@ import {
   Implication,
   Biconditional,
   TrueConstant,
-  FalseConstant
+  FalseConstant,
 } from './expressions';
 import type { Token } from './parser';
 
@@ -63,15 +63,15 @@ function parseExpression(tokens: Token[], startIndex: number): ParseResult {
  */
 function parseBiconditional(tokens: Token[], startIndex: number): ParseResult {
   let result = parseImplication(tokens, startIndex);
-  
+
   while (result.nextIndex < tokens.length && tokens[result.nextIndex] === '<=>') {
     const rightResult = parseImplication(tokens, result.nextIndex + 1);
     result = {
       expression: new Biconditional(result.expression, rightResult.expression),
-      nextIndex: rightResult.nextIndex
+      nextIndex: rightResult.nextIndex,
     };
   }
-  
+
   return result;
 }
 
@@ -80,15 +80,15 @@ function parseBiconditional(tokens: Token[], startIndex: number): ParseResult {
  */
 function parseImplication(tokens: Token[], startIndex: number): ParseResult {
   let result = parseDisjunction(tokens, startIndex);
-  
+
   while (result.nextIndex < tokens.length && tokens[result.nextIndex] === '=>') {
     const rightResult = parseDisjunction(tokens, result.nextIndex + 1);
     result = {
       expression: new Implication(result.expression, rightResult.expression),
-      nextIndex: rightResult.nextIndex
+      nextIndex: rightResult.nextIndex,
     };
   }
-  
+
   return result;
 }
 
@@ -97,15 +97,15 @@ function parseImplication(tokens: Token[], startIndex: number): ParseResult {
  */
 function parseDisjunction(tokens: Token[], startIndex: number): ParseResult {
   let result = parseConjunction(tokens, startIndex);
-  
+
   while (result.nextIndex < tokens.length && tokens[result.nextIndex] === '|') {
     const rightResult = parseConjunction(tokens, result.nextIndex + 1);
     result = {
       expression: new Disjunction(result.expression, rightResult.expression),
-      nextIndex: rightResult.nextIndex
+      nextIndex: rightResult.nextIndex,
     };
   }
-  
+
   return result;
 }
 
@@ -114,15 +114,15 @@ function parseDisjunction(tokens: Token[], startIndex: number): ParseResult {
  */
 function parseConjunction(tokens: Token[], startIndex: number): ParseResult {
   let result = parseNegation(tokens, startIndex);
-  
+
   while (result.nextIndex < tokens.length && tokens[result.nextIndex] === '&') {
     const rightResult = parseNegation(tokens, result.nextIndex + 1);
     result = {
       expression: new Conjunction(result.expression, rightResult.expression),
-      nextIndex: rightResult.nextIndex
+      nextIndex: rightResult.nextIndex,
     };
   }
-  
+
   return result;
 }
 
@@ -138,10 +138,10 @@ function parseNegation(tokens: Token[], startIndex: number): ParseResult {
     const innerResult = parseNegation(tokens, startIndex + 1);
     return {
       expression: new Negation(innerResult.expression),
-      nextIndex: innerResult.nextIndex
+      nextIndex: innerResult.nextIndex,
     };
   }
-  
+
   return parsePrimary(tokens, startIndex);
 }
 
@@ -158,7 +158,7 @@ function parsePrimary(tokens: Token[], startIndex: number): ParseResult {
   // Handle parenthesized expressions
   if (token === '(') {
     const innerResult = parseExpression(tokens, startIndex + 1);
-    
+
     if (innerResult.nextIndex >= tokens.length || tokens[innerResult.nextIndex] !== ')') {
       throw new ExpressionParseError(
         'Missing closing parenthesis',
@@ -166,10 +166,10 @@ function parsePrimary(tokens: Token[], startIndex: number): ParseResult {
         tokens[innerResult.nextIndex]
       );
     }
-    
+
     return {
       expression: innerResult.expression,
-      nextIndex: innerResult.nextIndex + 1
+      nextIndex: innerResult.nextIndex + 1,
     };
   }
 
@@ -177,14 +177,14 @@ function parsePrimary(tokens: Token[], startIndex: number): ParseResult {
   if (token === 'true') {
     return {
       expression: new TrueConstant(),
-      nextIndex: startIndex + 1
+      nextIndex: startIndex + 1,
     };
   }
 
   if (token === 'false') {
     return {
       expression: new FalseConstant(),
-      nextIndex: startIndex + 1
+      nextIndex: startIndex + 1,
     };
   }
 
@@ -192,16 +192,12 @@ function parsePrimary(tokens: Token[], startIndex: number): ParseResult {
   if (isValidVariableName(token)) {
     return {
       expression: new Variable(token),
-      nextIndex: startIndex + 1
+      nextIndex: startIndex + 1,
     };
   }
 
   // If we reach here, we have an unexpected token
-  throw new ExpressionParseError(
-    `Unexpected token: '${token}'`,
-    startIndex,
-    token
-  );
+  throw new ExpressionParseError(`Unexpected token: '${token}'`, startIndex, token);
 }
 
 /**
@@ -236,14 +232,14 @@ export function parseToAST(expression: string): BooleanExpression {
 function simpleTokenize(expression: string): Token[] {
   // Remove extra spaces and split on whitespace and operators
   const normalizedExpr = expression.replace(/\s+/g, ' ').trim();
-  
+
   // This is a simplified tokenizer - in practice, we'd use the parser module
   const tokens: Token[] = [];
   let currentToken = '';
-  
+
   for (let i = 0; i < normalizedExpr.length; i++) {
     const char = normalizedExpr[i];
-    
+
     if (' ()&|!'.includes(char)) {
       if (currentToken) {
         tokens.push(currentToken);
@@ -259,7 +255,11 @@ function simpleTokenize(expression: string): Token[] {
       }
       tokens.push('=>');
       i++; // Skip the '>'
-    } else if (char === '<' && i + 2 < normalizedExpr.length && normalizedExpr.slice(i, i + 3) === '<=>') {
+    } else if (
+      char === '<' &&
+      i + 2 < normalizedExpr.length &&
+      normalizedExpr.slice(i, i + 3) === '<=>'
+    ) {
       if (currentToken) {
         tokens.push(currentToken);
         currentToken = '';
@@ -270,10 +270,10 @@ function simpleTokenize(expression: string): Token[] {
       currentToken += char;
     }
   }
-  
+
   if (currentToken) {
     tokens.push(currentToken);
   }
-  
+
   return tokens;
 }

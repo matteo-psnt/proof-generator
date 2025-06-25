@@ -1,6 +1,6 @@
 /**
  * Boolean Expression Parser
- * 
+ *
  * This module handles parsing of Boolean expressions from string input.
  * It supports various notations and converts them to a standardized token format.
  */
@@ -18,9 +18,8 @@ const DELIMITER_MAPPING: Record<string, string> = {
   'AND': '&',
   'and': '&',
   '*': '&',
-  '.': '&',
 
-  // Logical OR variations  
+  // Logical OR variations
   '∨': '|',
   'v': '|',
   '||': '|',
@@ -54,7 +53,7 @@ const DELIMITER_MAPPING: Record<string, string> = {
   'T': 'true',
   't': 'true',
   '1': 'true',
-  
+
   'FALSE': 'false',
   'False': 'false',
   'F': 'false',
@@ -65,9 +64,7 @@ const DELIMITER_MAPPING: Record<string, string> = {
 /**
  * Standard delimiters recognized by the parser
  */
-const STANDARD_DELIMITERS = [
-  '!', '&', '|', '=>', '<=>', '(', ')', 'true', 'false', ','
-];
+const STANDARD_DELIMITERS = ['!', '&', '|', '=>', '<=>', '(', ')', 'true', 'false', ','];
 
 /**
  * Parse a Boolean expression string into tokens
@@ -83,7 +80,7 @@ export function parseExpression(expression: string): Token[] {
   // Apply delimiter mapping to normalize the expression
   // Sort by length in descending order to handle longer patterns first (e.g., '<->' before '->')
   const sortedEntries = Object.entries(DELIMITER_MAPPING).sort(([a], [b]) => b.length - a.length);
-  
+
   for (const [variant, standard] of sortedEntries) {
     // Handle Unicode symbols and multi-character symbols differently from word-based tokens
     if (variant.match(/[^\w\s]/)) {
@@ -125,8 +122,8 @@ export function parseExpression(expression: string): Token[] {
   // Split and filter out empty strings
   const tokens = processedExpr
     .split(regex)
-    .map(token => token.trim())
-    .filter(token => token !== '');
+    .map((token) => token.trim())
+    .filter((token) => token !== '');
 
   return tokens;
 }
@@ -168,24 +165,24 @@ export function addParentheses(tokens: Token[]): Token[] {
  */
 function isFullyParenthesized(tokens: Token[]): boolean {
   if (tokens.length < 3) return false;
-  
+
   // Check if the expression starts with '(' and ends with ')'
   if (tokens[0] !== '(' || tokens[tokens.length - 1] !== ')') {
     return false;
   }
-  
+
   // Check if the opening and closing parentheses match
   let depth = 0;
   for (let i = 0; i < tokens.length - 1; i++) {
     if (tokens[i] === '(') depth++;
     else if (tokens[i] === ')') depth--;
-    
+
     // If depth becomes 0 before the end, it means the outer parentheses don't wrap the entire expression
     if (depth === 0) {
       return false;
     }
   }
-  
+
   return true;
 }
 
@@ -194,7 +191,7 @@ function isFullyParenthesized(tokens: Token[]): boolean {
  */
 function validateParentheses(tokens: Token[]): void {
   let depth = 0;
-  
+
   for (const token of tokens) {
     if (token === '(') {
       depth++;
@@ -205,7 +202,7 @@ function validateParentheses(tokens: Token[]): void {
       }
     }
   }
-  
+
   if (depth !== 0) {
     throw new Error('Unbalanced parentheses: missing closing parenthesis');
   }
@@ -222,20 +219,20 @@ function addNegationParentheses(tokens: Token[]): Token[] {
     if (tokens[i] === '!') {
       result.push('(');
       result.push('!');
-      
+
       if (tokens[i + 1] === '(') {
         // Handle negation of parenthesized expression
         result.push('(');
         i += 2;
-        
+
         let depth = 1;
         while (i < tokens.length && depth > 0) {
           const token = tokens[i];
           result.push(token);
-          
+
           if (token === '(') depth++;
           else if (token === ')') depth--;
-          
+
           i++;
         }
       } else {
@@ -243,37 +240,37 @@ function addNegationParentheses(tokens: Token[]): Token[] {
         if (i + 1 >= tokens.length) {
           throw new Error('Missing operand after negation');
         }
-        
+
         // If next token is another negation, we need to handle it properly
         if (tokens[i + 1] === '!') {
           // Find the complete negation chain and the final operand
           let negationCount = 0;
           let j = i + 1;
-          
+
           // Count consecutive negations
           while (j < tokens.length && tokens[j] === '!') {
             negationCount++;
             j++;
           }
-          
+
           if (j >= tokens.length) {
             throw new Error('Missing operand after negation');
           }
-          
+
           // Add the nested structure
           for (let k = 0; k < negationCount; k++) {
             result.push('(');
             result.push('!');
           }
-          
+
           // Add the final operand
           result.push(tokens[j]);
-          
+
           // Close all the parentheses
           for (let k = 0; k < negationCount; k++) {
             result.push(')');
           }
-          
+
           // Skip all the processed tokens
           i = j + 1;
         } else {
@@ -282,7 +279,7 @@ function addNegationParentheses(tokens: Token[]): Token[] {
           i += 2;
         }
       }
-      
+
       result.push(')');
     } else {
       result.push(tokens[i]);
@@ -304,7 +301,7 @@ function addOperatorParentheses(tokens: Token[], operator: string): Token[] {
 
   // Find all occurrences of the operator (right to left for right associativity)
   const indices: number[] = [];
-  
+
   for (let i = tokens.length - 1; i >= 0; i--) {
     if (tokens[i] === operator) {
       // Skip operators that are already inside parentheses
@@ -320,7 +317,7 @@ function addOperatorParentheses(tokens: Token[], operator: string): Token[] {
   // Process each operator occurrence
   for (const index of indices) {
     if (index >= result.length) continue;
-    
+
     const actualIndex = result.indexOf(operator, index);
     if (actualIndex === -1) continue;
 
@@ -330,13 +327,13 @@ function addOperatorParentheses(tokens: Token[], operator: string): Token[] {
 
     // Find the bounds of the left operand
     const leftStart = findLeftOperandStart(result, actualIndex);
-    
-    // Find the bounds of the right operand  
+
+    // Find the bounds of the right operand
     const rightEnd = findRightOperandEnd(result, actualIndex);
 
     // Insert closing parenthesis
     result.splice(rightEnd + 1, 0, ')');
-    
+
     // Insert opening parenthesis
     result.splice(leftStart, 0, '(');
   }
@@ -349,13 +346,13 @@ function addOperatorParentheses(tokens: Token[], operator: string): Token[] {
  */
 function isOperatorInParentheses(tokens: Token[], operatorIndex: number): boolean {
   let depth = 0;
-  
+
   // Check if we're inside parentheses by counting depth from the start
   for (let i = 0; i < operatorIndex; i++) {
     if (tokens[i] === '(') depth++;
     else if (tokens[i] === ')') depth--;
   }
-  
+
   return depth > 0;
 }
 
@@ -367,17 +364,17 @@ function findLeftOperandStart(tokens: Token[], operatorIndex: number): number {
     // Left operand is a parenthesized expression
     let depth = 1;
     let i = operatorIndex - 2;
-    
+
     while (i >= 0 && depth > 0) {
       if (tokens[i] === ')') depth++;
       else if (tokens[i] === '(') depth--;
       i--;
     }
-    
+
     if (depth !== 0) {
       throw new Error('Unbalanced parentheses in left operand');
     }
-    
+
     return i + 1;
   } else {
     // Left operand is a simple token
@@ -393,17 +390,17 @@ function findRightOperandEnd(tokens: Token[], operatorIndex: number): number {
     // Right operand is a parenthesized expression
     let depth = 1;
     let i = operatorIndex + 2;
-    
+
     while (i < tokens.length && depth > 0) {
       if (tokens[i] === '(') depth++;
       else if (tokens[i] === ')') depth--;
       i++;
     }
-    
+
     if (depth !== 0) {
       throw new Error('Unbalanced parentheses in right operand');
     }
-    
+
     return i - 1;
   } else {
     // Right operand is a simple token
