@@ -14,4 +14,4 @@ jobs:
         with:
           token: ${{ secrets.PAT }}
           repository: matteo-psnt/personal-website
-          event-type: proof-generator-pushed
+          event-type: trigger-deploy
