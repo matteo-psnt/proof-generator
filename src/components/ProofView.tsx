@@ -40,6 +40,17 @@ export function ProofView() {
   const [searchAbortController, setSearchAbortController] = useState<AbortController | null>(null);
   const [autoCalculateLength, setAutoCalculateLength] = useState(true);
   const [manualMaxLength, setManualMaxLength] = useState(15);
+  
+  const [startInputValue, setStartInputValue] = useState(startExpressionString);
+  const [targetInputValue, setTargetInputValue] = useState(targetExpressionString);
+
+  useEffect(() => {
+    setStartInputValue(startExpressionString);
+  }, [startExpressionString]);
+
+  useEffect(() => {
+    setTargetInputValue(targetExpressionString);
+  }, [targetExpressionString]);
 
   // Helper function to safely parse expression and get length
   const getExpressionLength = (value: string): number => {
@@ -109,18 +120,20 @@ export function ProofView() {
   };
 
   const handleStartChange = (value: string) => {
+    setStartInputValue(value);
     setStartExpression(value);
     setProof(null);
   };
 
   const handleTargetChange = (value: string) => {
+    setTargetInputValue(value);
     setTargetExpression(value);
     setProof(null);
   };
 
   const handleSearch = async () => {
-    const startExpr = validateInput(startExpressionString, () => {});
-    const targetExpr = validateInput(targetExpressionString, () => {});
+    const startExpr = validateInput(startInputValue, () => {});
+    const targetExpr = validateInput(targetInputValue, () => {});
 
     if (!startExpr || !targetExpr) {
       return;
@@ -191,8 +204,8 @@ export function ProofView() {
   };
 
   const canSearch =
-    startExpressionString.trim() &&
-    targetExpressionString.trim() &&
+    startInputValue.trim() &&
+    targetInputValue.trim() &&
     !startExpressionError &&
     !targetExpressionError;
 
@@ -211,7 +224,7 @@ export function ProofView() {
             <input
               id="start-expr"
               type="text"
-              value={startExpressionString}
+              value={startInputValue}
               onChange={(e) => handleStartChange(e.target.value)}
               placeholder="e.g., !(a & b)"
               className={`input font-mono ${
@@ -231,7 +244,7 @@ export function ProofView() {
             <input
               id="target-expr"
               type="text"
-              value={targetExpressionString}
+              value={targetInputValue}
               onChange={(e) => handleTargetChange(e.target.value)}
               placeholder="e.g., !a | !b"
               className={`input font-mono ${
