@@ -105,10 +105,10 @@ const operatorSymbols: Record<string, string> = {
 
 function convertExpressionToNodes(
   expr: BooleanExpression,
-  nodeId: string = '0',
-  x: number = 0,
-  y: number = 0,
-  level: number = 0
+  nodeId = '0',
+  x = 0,
+  y = 0,
+  level = 0
 ): { nodes: ASTNode[]; edges: ASTEdge[]; width: number } {
   const nodes: ASTNode[] = [];
   const edges: ASTEdge[] = [];
