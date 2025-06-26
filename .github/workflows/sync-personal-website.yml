@@ -12,6 +12,6 @@ jobs:
       - name: Tell website to rebuild
         uses: peter-evans/repository-dispatch@v2
         with:
-          token:        ${{ secrets.PAT }}
-          repository:   matteo-psnt/personal-website
-          event-type:   proof-generator-pushed
+          token: ${{ secrets.PAT }}
+          repository: matteo-psnt/personal-website
+          event-type: proof-generator-pushed

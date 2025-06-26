@@ -57,7 +57,7 @@ export default [
       '@typescript-eslint/no-explicit-any': ['warn'],
       '@typescript-eslint/prefer-as-const': ['error'],
       '@typescript-eslint/no-inferrable-types': ['off'], // Allow explicit types in tests
-      
+
       // React hooks rules
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
@@ -125,7 +125,7 @@ export default [
       '@typescript-eslint/no-explicit-any': ['warn'],
       '@typescript-eslint/prefer-as-const': ['error'],
       '@typescript-eslint/no-inferrable-types': ['warn'],
-      
+
       // React hooks rules
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
@@ -134,7 +134,6 @@ export default [
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
 
       // Quality rules (no formatting - Prettier handles that)
-      'no-console': ['warn'],
       'prefer-const': ['error'],
       'no-var': ['error'],
       'no-undef': ['error'],

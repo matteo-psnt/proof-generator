@@ -243,18 +243,14 @@ export function TruthTableView() {
               </thead>
               <tbody>
                 {truthTable.rows.map((row: TruthTableRow) => {
-                  const rowKey =
-                    JSON.stringify(row.assignment) + '-' + String(row.result);
+                  const rowKey = JSON.stringify(row.assignment) + '-' + String(row.result);
                   const rowIndex = truthTable.rows.findIndex(
                     (r) =>
-                      JSON.stringify(r.assignment) ===
-                        JSON.stringify(row.assignment) && r.result === row.result
+                      JSON.stringify(r.assignment) === JSON.stringify(row.assignment) &&
+                      r.result === row.result
                   );
                   return (
-                    <tr
-                      key={rowKey}
-                      className={rowIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
-                    >
+                    <tr key={rowKey} className={rowIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
                       {truthTable.variables.map((variable: string) => (
                         <td
                           key={variable}

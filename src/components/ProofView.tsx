@@ -515,7 +515,10 @@ export function ProofView() {
                 <h4 className="font-medium text-gray-900 mb-3">Proof Steps:</h4>
                 <div className="space-y-2 font-mono text-sm">
                   {proof.steps.map((step: ProofStep) => (
-                    <div key={step.stepNumber + '-' + step.expression.toString()} className="flex items-start space-x-3">
+                    <div
+                      key={step.stepNumber + '-' + step.expression.toString()}
+                      className="flex items-start space-x-3"
+                    >
                       <span className="text-gray-500 min-w-[2rem]">{step.stepNumber}.</span>
                       <div className="flex-1">
                         <div className="expression text-gray-900 mb-1">

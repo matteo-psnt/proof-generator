@@ -97,10 +97,7 @@ export function ASTInput() {
 
         {/* Quick Examples */}
         <div>
-          <label
-            htmlFor="quick-examples"
-            className="block text-sm font-medium text-gray-700 mb-2"
-          >
+          <label htmlFor="quick-examples" className="block text-sm font-medium text-gray-700 mb-2">
             Quick examples
           </label>
           <div id="quick-examples" className="flex flex-wrap gap-2">
